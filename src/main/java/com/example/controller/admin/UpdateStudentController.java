@@ -20,7 +20,7 @@ public class UpdateStudentController extends HttpServlet {
         Student users = new UserDAO().findStudentById(id);
         req.setAttribute("activePage", "sinhvien");
         req.setAttribute("users", users);
-        req.getRequestDispatcher("/view/admin/update-sinhvien.jsp").forward(req, resp);
+        req.getRequestDispatcher("/view/admin/update_sinhvien.jsp").forward(req, resp);
     }
 
     @Override

@@ -18,10 +18,10 @@
 				<div class="card">
 					<div class="card-body">
 						<form class="row g-3"
-							action="${pageContext.request.contextPath}/admin/update-user"
+							action="${pageContext.request.contextPath}/admin/update-sinhvien"
 							method="post">
 							<div class="col-md-6">
-								<label class="form-label">Mã</label> <input type="hidden"
+								<label class="form-label">Mã</label> <input
 									class="form-control" name="id" value="${users.id}" readonly>
 							</div>
 							<div class="col-md-6">

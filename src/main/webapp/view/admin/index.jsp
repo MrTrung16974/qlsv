@@ -189,10 +189,6 @@
 												<p style="color: red;">${param.error}</p>
 											</c:if>
 											<div class="col-md-6">
-												<label class="form-label">Mã</label> <input type="text"
-													class="form-control" name="id" required>
-											</div>
-											<div class="col-md-6">
 												<label class="form-label">Tên</label> <input type="text"
 													class="form-control" name="ten" required>
 											</div>

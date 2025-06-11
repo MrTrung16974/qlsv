@@ -12,7 +12,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.util.StringUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
@@ -46,8 +48,10 @@ public class ImportExcelController extends HttpServlet {
                     user.setId(getCellStringValue(row.getCell(0)));
 
                     // Sinh mã người dùng
-                    var userCode = userDAO.genUserCode("USER");
-                    if(Objects.nonNull(userCode)) user.setId(userCode);
+                    if(Objects.isNull(user.getId()) || StringUtil.isBlank(user.getId())) {
+                        var userCode = userDAO.genUserCode("USER");
+                        if (Objects.nonNull(userCode)) user.setId(userCode);
+                    }
 
                     user.setName(getCellStringValue(row.getCell(1)));
                     user.setAddress(getCellStringValue(row.getCell(2)));

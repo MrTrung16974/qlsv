@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.util.StringUtil;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -55,8 +56,11 @@ public class AddStudentController extends HttpServlet {
         UserDAO userDAO = new UserDAO();
 
         // Sinh mã người dùng
-        var userCode = userDAO.genUserCode("USER");
-        if(Objects.nonNull(userCode)) user.setId(userCode);
+
+        if(Objects.isNull(user.getId()) || StringUtil.isBlank(user.getId())) {
+            var userCode = userDAO.genUserCode("USER");
+            if(Objects.nonNull(userCode)) user.setId(userCode);
+        }
         try {
             userDAO.addStudent(user);
 

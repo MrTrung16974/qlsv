@@ -83,7 +83,7 @@
                                                 <i class="fa-solid fa-table"></i>
                                                 </a>
 												<a
-													href="${pageContext.request.contextPath}/admin/update-user?id=${user.id}"
+													href="${pageContext.request.contextPath}/admin/update-sinhvien?id=${user.id}"
 													class="text-success"> <i
 													class="fa-regular fa-pen-to-square"></i>
 												</a>
