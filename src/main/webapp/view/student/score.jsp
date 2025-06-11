@@ -73,8 +73,7 @@
                                     <th scope="col">Tên học phần</th>
                                     <th scope="col">Học kỳ</th>
                                     <th scope="col">Điểm quá trình</th>
-                                    <th scope="col">Điểm giữa kỳ</th>
-                                    <th scope="col">Điểm cuối kỳ</th>
+                                    <th scope="col">Điểm thi</th>
                                     <th scope="col">Điểm tổng kết</th>
                                     <th scope="col">Điểm chữ</th>
                                     <th scope="col">Trạng thái</th>
@@ -86,23 +85,20 @@
                                         <th scope="row">${status.index + 1}</th>
                                         <td class="text-start">${s.subject.name}</td>
                                         <td>${s.subject.cycle.name}</td>
-                                        <td>${s.scoreLaborious}</td>
-                                        <td>${s.scoreCheck}</td>
+                                        <td>${s.scoreProcess}</td>
                                         <td>${s.scoreFinal}</td>
-                                        <c:set var="avgProcess" value="${(s.scoreLaborious + s.scoreCheck) / 2}" />
-                                        <c:set var="total" value="${avgProcess * s.subject.processCoefficient + s.scoreFinal * s.subject.examCoefficient}" />
-                                        <td><fmt:formatNumber value="${total}" maxFractionDigits="2" /></td>
+                                        <td>${s.score_average}</td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${total >= 8.5}">A</c:when>
-                                                <c:when test="${total >= 7.0}">B</c:when>
-                                                <c:when test="${total >= 5.5}">C</c:when>
-                                                <c:when test="${total >= 4.0}">D</c:when>
+                                                <c:when test="${s.score_average >= 8.5}">A</c:when>
+                                                <c:when test="${s.score_average >= 7.0}">B</c:when>
+                                                <c:when test="${s.score_average >= 5.5}">C</c:when>
+                                                <c:when test="${s.score_average >= 4.0}">D</c:when>
                                                 <c:otherwise>F</c:otherwise>
                                             </c:choose>
                                         </td>
                                         <c:choose>
-                                            <c:when test="${total >= 5.0}">
+                                            <c:when test="${s.score_average >= 5.0}">
                                                 <c:set var="statusText" value="Đạt" />
                                                 <c:set var="statusClass" value="bg-success" />
                                             </c:when>

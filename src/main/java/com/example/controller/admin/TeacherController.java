@@ -3,8 +3,7 @@ package com.example.controller.admin;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.example.dao.LoginDAO;
 import com.example.dao.UserDAO;
-import com.example.model.Login;
-import com.example.model.Users;
+import com.example.model.Teacher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,6 +16,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -35,7 +35,7 @@ public class TeacherController extends HttpServlet {
         }
 
         UserDAO userDAO = new UserDAO();
-        List<Users> usersList = userDAO.searchUsers(keyword, (page - 1) * recordsPerPage, recordsPerPage);
+        List<Teacher> usersList = userDAO.searchUsers(keyword, (page - 1) * recordsPerPage, recordsPerPage);
         int totalRecords = userDAO.countUsers(keyword);
         int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
 
@@ -52,15 +52,10 @@ public class TeacherController extends HttpServlet {
         String name = req.getParameter("ten");
         String phone = req.getParameter("sdt");
         String email = req.getParameter("email");
-        String address = req.getParameter("diachi");
         String dateOfBirth = req.getParameter("ngaysinh");
-        String startTime = req.getParameter("starttime");
-        String endTime = req.getParameter("endtime");
-        String chucVu = req.getParameter("chucVu");
-        String loaiChucVu = req.getParameter("loaiChucVu");
 
         UserDAO userDAO = new UserDAO();
-        Users check = userDAO.findById(id);
+        Teacher check = userDAO.findById(id);
         if (check != null){
             String errorMessage = "Bạn đã nhập trùng mã giáo viên đã có trong hệ thống. Mời nhập lại!";
             String encodedError = URLEncoder.encode(errorMessage, StandardCharsets.UTF_8.toString());
@@ -68,33 +63,25 @@ public class TeacherController extends HttpServlet {
             return;
         }
         String hashedPassword = BCrypt.withDefaults().hashToString(12, dateOfBirth.toCharArray());
-        Users user = new Users();
+        Teacher user = new Teacher();
         user.setId(id);
+        // Sinh mã người dùng
+        var userCode = userDAO.genUserCode("TEACHER");
+        if(Objects.nonNull(userCode)) user.setId(userCode);
+
         user.setName(name);
         user.setPhone(phone);
         user.setEmail(email);
-        user.setAddress(address);
         user.setDateOfBirth(Date.valueOf(dateOfBirth));
-        user.setStartTime(Date.valueOf(startTime));
-        user.setEndTime(Date.valueOf(endTime));
-        user.setType(chucVu);
-        user.setTypePosition(loaiChucVu);
+        user.setType(1);
         user.setCreateAt(new java.sql.Date(System.currentTimeMillis()));
         user.setLastmodified(new java.sql.Date(System.currentTimeMillis()));
         user.setDeleted(false);
-        user.setLockStatus(false);
-
-        Login login = new Login();
-        login.setId(UUID.randomUUID().toString());
-        login.setUsername(id);
-        login.setPassword(hashedPassword);
-        login.setDeleted(false);
-        login.setUsers(user);
-        LoginDAO loginDAO = new LoginDAO();
+        user.setStatus(false);
+        user.setPassword(hashedPassword);
 
         try {
             userDAO.addUser(user);
-            loginDAO.addLogin(login);
             req.getSession().setAttribute("successMessage", "Thêm mới người dùng thành công!");
             resp.sendRedirect(req.getContextPath() + "/admin/list-user");
         } catch (Exception e) {

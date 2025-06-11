@@ -20,8 +20,10 @@
 						<form class="row g-3"
 							action="${pageContext.request.contextPath}/admin/update-user"
 							method="post">
-							<input type="hidden"
-									class="form-control" name="id" value="${users.id}" >
+							<div class="col-md-6">
+								<label class="form-label">Mã</label> <input type="hidden"
+									class="form-control" name="id" value="${users.id}" readonly>
+							</div>
 							<div class="col-md-6">
 								<label class="form-label">Tên</label> <input type="text"
 									class="form-control" name="ten" value="${users.name}">
@@ -36,14 +38,31 @@
 									value="${users.email}">
 							</div>
 							<div class="col-md-6">
+								<label class="form-label">Địa chỉ</label> <input type="text"
+									class="form-control" name="diachi" required
+									value="${users.address}">
+							</div>
+							<div class="col-md-6">
 								<label class="form-label">Ngày sinh</label> <input type="date"
 									class="form-control" name="ngaysinh"
 									value="${users.dateOfBirth}">
 							</div>
+							<div class="col-md-6">
+								<label class="form-label">Năm bắt đầu</label> <input
+									type="date" class="form-control" name="starttime"
+									value="${users.startYear}">
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">Năm kết thúc</label> <input
+									type="date" class="form-control" name="endtime"
+									value="${users.endYear}">
+							</div>
+
+
 							<div class="col-12">
 								<input type="submit" class="btn btn-primary"
 									value="Lưu thay đổi">
-										<a href="${pageContext.request.contextPath}/admin/list-user"
+										<a href="${pageContext.request.contextPath}/admin/sinhvien"
 											class="btn btn-success">Thoát</a>
 							</div>
 						</form>

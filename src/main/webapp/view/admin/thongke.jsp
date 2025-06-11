@@ -317,24 +317,24 @@
                 <tbody id="studentsTableBody">
                     <c:choose>
                         <c:when test="${not empty scores}">
-                            <c:forEach items="${scores}" var="student" varStatus="status">
+                            <c:forEach items="${scores}" var="s" varStatus="status">
                                 <tr>
                                     <td>${status.index + 1}</td>
-                                    <td>${student.users.id}</td>
-                                    <td>${student.users.name}</td>
-                                    <td><fmt:formatNumber value="${student.scoreAverage}" maxFractionDigits="2" minFractionDigits="2" /></td>
+                                    <td>${s.student.id}</td>
+                                    <td>${s.student.name}</td>
+                                    <td><fmt:formatNumber value="${s.score_average}" maxFractionDigits="2" minFractionDigits="2" /></td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${student.scoreAverage >= 8.5}">
+                                            <c:when test="${s.score_average >= 8.5}">
                                                 Xuất sắc
                                             </c:when>
-                                            <c:when test="${student.scoreAverage >= 7}">
+                                            <c:when test="${s.score_average >= 7}">
                                                 Giỏi
                                             </c:when>
-                                            <c:when test="${student.scoreAverage >= 5.5}">
+                                            <c:when test="${s.score_average >= 5.5}">
                                                 Khá
                                             </c:when>
-                                            <c:when test="${student.scoreAverage >= 3.5}">
+                                            <c:when test="${s.score_average >= 3.5}">
                                                 Trung bình
                                             </c:when>
                                             <c:otherwise>

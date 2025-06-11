@@ -1,7 +1,8 @@
 package com.example.dao;
 
-import com.example.model.Score;
-import com.example.model.Users;
+import com.example.model.ScoreSubject;
+import com.example.model.Student;
+import com.example.model.Teacher;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,69 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScoreDAO extends DBConnect{
-    public void add(Score score) {
-        String sql = "INSERT INTO score (id, created_at, lastmodified, deleted, user_id) VALUES (?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, score.getId());
-            ps.setDate(2, new java.sql.Date(score.getCreateAt().getTime()));
-            ps.setDate(3, new java.sql.Date(score.getLastmodified().getTime()));
-            ps.setBoolean(4, score.isDeleted());
-            ps.setString(5, score.getUsers().getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void update(Score score) {
-        String sql = "UPDATE score SET lastmodified = ?, deleted = ? WHERE id = ?";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setDate(1, new java.sql.Date(score.getLastmodified().getTime()));
-            ps.setBoolean(2, score.isDeleted());
-            ps.setString(3, score.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void delete(String id) {
-        String sql = "DELETE FROM score  WHERE id = ?";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public Score findById(String id){
-        String sql = "select * from score where id = ?";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1,id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()){
-                Users userId = new UserDAO().findById(rs.getString("user_id"));
-                Score score = new Score(rs.getString("id"),rs.getDate("created_at"),rs.getDate("lastmodified"), rs.getBoolean("deleted"),userId );
-                return score;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
     public double getScoreByCycleId(String studentId, String cycleId) {
-        String sql = "SELECT AVG(ss.score_average) AS average_score " +
-                "FROM score s " +
-                "JOIN score_subject ss ON s.id = ss.score_id " +
-                "JOIN subject sub ON ss.subject_id = sub.id " +
-                "JOIN cycle c ON sub.cycle_id = c.id " +
-                "JOIN users u ON s.user_id = u.id " +
-                "WHERE c.id = ? AND u.id = ? AND s.deleted = 0 AND sub.deleted = 0 " +
-                "GROUP BY u.id, c.id";
+        String sql = "SELECT AVG(ss.SCORE_AVERAGE) AS average_score " +
+                "FROM SCORE_SUBJECT ss " +
+                "JOIN SUBJECT sub ON ss.SUBJECT_ID = sub.ID " +
+                "JOIN CYCLE c ON sub.CYCLE_ID = c.ID " +
+                "JOIN STUDENT u ON ss.STUDENT_ID = u.ID " +
+                "WHERE c.ID = ? AND u.ID = ? AND sub.DELETED = 0 " +
+                "GROUP BY u.ID, c.ID";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -88,10 +35,9 @@ public class ScoreDAO extends DBConnect{
         return 0.0;
     }
     public double getAverageScoreAllCourse(String studentId) {
-        String sql = "SELECT AVG(ss.score_average) AS average_score " +
-                "FROM score s " +
-                "JOIN score_subject ss ON s.id = ss.score_id " +
-                "WHERE s.user_id = ? AND s.deleted = 0";
+        String sql = "SELECT AVG(SCORE_AVERAGE) AS average_score " +
+                "FROM SCORE_SUBJECT " +
+                "WHERE STUDENT_ID = ? AND DELETED = 0";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -105,22 +51,20 @@ public class ScoreDAO extends DBConnect{
         }
         return 0.0;
     }
-    public List<Score> getTopStudentsByCycle(String cycleId) {
-        List<Score> scores = new ArrayList<>();
-        String sql = "SELECT s.user_id AS student_id, u.name AS student_name, AVG(ss.score_average) AS average_score "
-                + "FROM score s "
-                + "LEFT JOIN score_subject ss ON s.id = ss.score_id "
-                + "LEFT JOIN subject sub ON ss.subject_id = sub.id "
-                + "LEFT JOIN cycle c ON sub.cycle_id = c.id "
-                + "LEFT JOIN users u ON s.user_id = u.id "
-                + "WHERE s.deleted = 0 "
-                + "AND u.type = 'sinhvien' ";
+    public List<ScoreSubject> getTopStudentsByCycle(String cycleId) {
+        List<ScoreSubject> scores = new ArrayList<>();
+        String sql = "SELECT s.STUDENT_ID AS student_id, u.NAME AS student_name, AVG(s.SCORE_AVERAGE) AS average_score "
+                + "FROM SCORE_SUBJECT s "
+                + "LEFT JOIN SUBJECT sub ON s.SUBJECT_ID = sub.ID "
+                + "LEFT JOIN CYCLE c ON sub.CYCLE_ID = c.ID "
+                + "LEFT JOIN STUDENT u ON s.STUDENT_ID = u.ID "
+                + "WHERE s.DELETED = 0 ";
         if (!"all".equals(cycleId)) {
-            sql += "AND c.id = ? ";
+            sql += "AND c.ID = ? ";
         }
-        sql += "GROUP BY s.user_id, u.name "
+        sql += "GROUP BY s.STUDENT_ID, u.NAME "
                 + "ORDER BY average_score DESC "
-                + "LIMIT 5";
+                + "FETCH FIRST 5 ROWS ONLY";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             if (!"all".equals(cycleId)) {
@@ -131,13 +75,13 @@ public class ScoreDAO extends DBConnect{
                 String studentId = rs.getString("student_id");
                 String studentName = rs.getString("student_name");
                 double averageScore = rs.getDouble("average_score");
-                Users user = new Users();
+                Student user = new Student();
                 user.setId(studentId);
                 user.setName(studentName);
-                Score score = new Score();
-                score.setUsers(user);
-                score.setScoreAverage(averageScore);
-                scores.add(score);
+                ScoreSubject scoreSubject = new ScoreSubject();
+                scoreSubject.setStudent(user);
+                scoreSubject.setScore_average(averageScore);
+                scores.add(scoreSubject);
             }
         } catch (SQLException e) {
             e.printStackTrace();

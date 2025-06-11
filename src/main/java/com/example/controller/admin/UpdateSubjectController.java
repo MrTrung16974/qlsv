@@ -5,7 +5,7 @@ import com.example.dao.SubjectDAO;
 import com.example.dao.UserDAO;
 import com.example.model.Cycle;
 import com.example.model.Subject;
-import com.example.model.Users;
+import com.example.model.Teacher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @WebServlet("/admin/update-monhoc")
 public class UpdateSubjectController extends HttpServlet {
@@ -25,7 +24,7 @@ public class UpdateSubjectController extends HttpServlet {
         String id = req.getParameter("id");
         Subject subject = new Subject();
         subject = new SubjectDAO().findById(id);
-        List<Users> users = new ArrayList<>();
+        List<Teacher> users = new ArrayList<>();
         users = new UserDAO().getAll();
         List<Cycle> cycles = new ArrayList<>();
         cycles = new CycleDAO().getAll();
@@ -57,7 +56,7 @@ public class UpdateSubjectController extends HttpServlet {
         subject.setLastmodified(new Date(System.currentTimeMillis()));
         subject.setDeleted(false);
         subject.setStatus(false);
-        Users teacher = new Users();
+        Teacher teacher = new Teacher();
         teacher.setId(teacherId);
         subject.setTeacher(teacher);
         Cycle cycle = new Cycle();

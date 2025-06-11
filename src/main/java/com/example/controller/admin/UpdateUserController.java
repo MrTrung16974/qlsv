@@ -1,10 +1,8 @@
 package com.example.controller.admin;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.example.dao.LoginDAO;
 import com.example.dao.UserDAO;
-import com.example.model.Login;
-import com.example.model.Users;
+import com.example.model.Teacher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.UUID;
+import java.util.Objects;
 
 @WebServlet("/admin/update-user")
 public class UpdateUserController extends HttpServlet {
@@ -21,13 +19,8 @@ public class UpdateUserController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         UserDAO userDAO = new UserDAO();
-        Users users = new Users();
-        users = userDAO.findById(id);
-        if (users.getType().equals("giaovien")){
-            req.setAttribute("activePage", "giaovien");
-        }else {
-            req.setAttribute("activePage", "sinhvien");
-        }
+        Teacher users = userDAO.findById(id);
+        req.setAttribute("activePage", "giaovien");
         req.setAttribute("users", users);
         req.getRequestDispatcher("/view/admin/update-user.jsp").forward(req, resp);
 
@@ -39,51 +32,25 @@ public class UpdateUserController extends HttpServlet {
         String name = req.getParameter("ten");
         String phone = req.getParameter("sdt");
         String email = req.getParameter("email");
-        String address = req.getParameter("diachi");
         String dateOfBirth = req.getParameter("ngaysinh");
-        String startTime = req.getParameter("starttime");
-        String endTime = req.getParameter("endtime");
-        String chucVu = req.getParameter("chucVu");
-        String loaiChucVu = req.getParameter("loaiChucVu");
 
-
-        String hashedPassword = BCrypt.withDefaults().hashToString(12,dateOfBirth.toCharArray());
-        Users user = new Users();
+        Teacher user = new Teacher();
         user.setId(id);
         user.setName(name);
         user.setPhone(phone);
         user.setEmail(email);
-        user.setAddress(address);
         user.setDateOfBirth(Date.valueOf(dateOfBirth));
-        user.setStartTime(Date.valueOf(startTime));
-        user.setEndTime(Date.valueOf(endTime));
-        user.setType(chucVu);
-        user.setTypePosition(loaiChucVu);
         user.setLastmodified(new java.sql.Date(System.currentTimeMillis()));
-        user.setDeleted(false);
-        user.setLockStatus(false);
-
-
-        Login login = new Login();
-        login.setId(UUID.randomUUID().toString());
-        login.setUsername(id);
-        login.setPassword(hashedPassword);
-        login.setDeleted(false);
-
         UserDAO userDAO = new UserDAO();
-        LoginDAO loginDAO = new LoginDAO();
+
+        // Sinh mã người dùng
+        var userCode = userDAO.genUserCode("TEACHER");
+        if(Objects.nonNull(userCode)) user.setId(userCode);
 
         try {
             userDAO.updateUser(user);
-            loginDAO.updateLogin(login);
-            if (user.getType().equals("giaovien")){
-                req.getSession().setAttribute("successMessage", "Sửa người dùng thành công!");
-                resp.sendRedirect("/qlsv/admin/list-user");
-            }else {
-                req.getSession().setAttribute("successMessage", "Sửa người dùng thành công!");
-                resp.sendRedirect("/qlsv/admin/sinhvien");
-            }
-
+            req.getSession().setAttribute("successMessage", "Sửa người dùng thành công!");
+            resp.sendRedirect("/qlsv/admin/list-user");
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("errorMessage", "Có lỗi xảy ra khi thêm người dùng.");

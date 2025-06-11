@@ -39,8 +39,7 @@
 								<th>Mã sinh viên</th>
 								<th>Tên sinh viên</th>
 								<th>Môn học</th>
-								<th>Điểm chuyên cần</th>
-								<th>Điểm kiểm tra</th>
+								<th>Điểm quá trình</th>
 								<th>Điểm thi cuối kỳ</th>
 								<th>Điểm trung bình môn</th>
 							</tr>
@@ -51,26 +50,18 @@
 							<c:forEach var="ss" items="${ss}" varStatus="loop">
 								<tr>
 								    <c:if test="${loop.index == 0}">
-                                        <td rowspan="${fn:length(ss.score.users.id)}">${ss.score.users.id}</td>
+                                        <td rowspan="${fn:length(ss.student.id)}">${ss.student.id}</td>
                                     </c:if>
                                     <c:if test="${loop.index == 0}">
-                                        <td rowspan="${fn:length(ss.score.users.name)}">${ss.score.users.name}</td>
+                                        <td rowspan="${fn:length(ss.student.name)}">${ss.student.name}</td>
                                     </c:if>
 									<td>${ss.subject.name}</td>
 									<td><c:choose>
-											<c:when test="${ss.scoreLaborious == 0.0}">
+											<c:when test="${ss.scoreProcess == 0.0}">
                                                 Chưa nhập điểm
                                             </c:when>
 											<c:otherwise>
-                                                ${ss.scoreLaborious}
-                                            </c:otherwise>
-										</c:choose></td>
-									<td><c:choose>
-											<c:when test="${ss.scoreCheck == 0.0}">
-                                                Chưa nhập điểm
-                                            </c:when>
-											<c:otherwise>
-                                                ${ss.scoreCheck}
+                                                ${ss.scoreProcess}
                                             </c:otherwise>
 										</c:choose></td>
 									<td><c:choose>

@@ -34,20 +34,13 @@
 
 							<input type="hidden" name="ssid" value="${ss.id}">
 							<input type="hidden" name="sid" value="${ss.subject.id}">
-							<input type="hidden" name="scoreId" value="${ss.score.id}">
+							<input type="hidden" name="scoreId" value="${ss.student.id}">
 
 							<div class="col-md-4">
 								<label class="form-label">Điểm chuyên cần</label>
 								<input type="number" min="0" max="10" step="1"
 									class="form-control" name="chuyencan" required
-									value="${ss.scoreLaborious}">
-							</div>
-
-							<div class="col-md-4">
-								<label class="form-label">Điểm kiểm tra</label>
-								<input type="number" min="0" max="10" step="1"
-									class="form-control" name="kiemtra" required
-									value="${ss.scoreCheck}">
+									value="${ss.scoreProcess}">
 							</div>
 
 							<div class="col-md-4">

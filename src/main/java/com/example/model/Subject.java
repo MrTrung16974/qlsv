@@ -13,11 +13,11 @@ public class Subject {
     private boolean deleted;
     private boolean status;
     private Cycle cycle;
-    private Users teacher;
+    private Teacher teacher;
     private Date startDate;
     private Date endDate;
 
-    public Subject(String id, String name, String description, double processCoefficient, double examCoefficient, Date createAt, Date lastmodified, boolean deleted, boolean status, Cycle cycle, Users teacher, Date startDate, Date endDate) {
+    public Subject(String id, String name, String description, double processCoefficient, double examCoefficient, Date createAt, Date lastmodified, boolean deleted, boolean status, Cycle cycle, Teacher teacher, Date startDate, Date endDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,7 +49,7 @@ public class Subject {
         this.endDate = endDate;
     }
 
-    public Subject(String id, String name, String description, double processCoefficient, double examCoefficient, Date createAt, Date lastmodified, boolean deleted, boolean status, Cycle cycle, Users teacher) {
+    public Subject(String id, String name, String description, double processCoefficient, double examCoefficient, Date createAt, Date lastmodified, boolean deleted, boolean status, Cycle cycle, Teacher teacher) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -79,7 +79,7 @@ public class Subject {
         this.examCoefficient = examCoefficient;
     }
 
-    public Subject(String id, String name, String description, Date createAt, Date lastmodified, boolean deleted, boolean status, Cycle cycle, Users teacher) {
+    public Subject(String id, String name, String description, Date createAt, Date lastmodified, boolean deleted, boolean status, Cycle cycle, Teacher teacher) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -91,11 +91,11 @@ public class Subject {
         this.teacher = teacher;
     }
 
-    public Users getTeacher() {
+    public Teacher getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(Users teacher) {
+    public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
 

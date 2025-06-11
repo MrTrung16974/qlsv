@@ -5,8 +5,6 @@
 		response.sendRedirect(request.getContextPath()+"/login");
 	}
 	String name = (String) session.getAttribute("name");
-    String type = (String) session.getAttribute("type");
-    String typePosition = (String) session.getAttribute("typeposition");
     String id = (String) session.getAttribute("id");
 %>
 <div class="header">

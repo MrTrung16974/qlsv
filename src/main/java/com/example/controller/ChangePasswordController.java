@@ -2,7 +2,6 @@ package com.example.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.example.dao.LoginDAO;
-import com.example.model.Login;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,27 +21,27 @@ public class ChangePasswordController extends HttpServlet {
         String confirmPassword = req.getParameter("confirmPassword");
 
         LoginDAO loginDAO = new LoginDAO();
-        Login login = loginDAO.getLoginByUserId(id);
-        BCrypt.Result result = BCrypt.verifyer().verify(currentPassword.toCharArray(), login.getPassword());
+//        Login login = loginDAO.getLoginByUserId(id);
+//        BCrypt.Result result = BCrypt.verifyer().verify(currentPassword.toCharArray(), login.getPassword());
+//
+//        String userType = login.getUsers().getType();
+//        String redirectPage = switch (userType) {
+//            case "sinhvien" -> "/view/student/index.jsp";
+//            case "giaovien" -> "/view/teacher/index.jsp";
+//            default -> "/view/admin/profile.jsp";
+//        };
+//
+//        if (!result.verified) {
+//            req.setAttribute("error", "Mật khẩu hiện tại không đúng!");
+//            req.getRequestDispatcher(redirectPage).forward(req, resp);
+//            return;
+//        }
 
-        String userType = login.getUsers().getType();
-        String redirectPage = switch (userType) {
-            case "sinhvien" -> "/view/student/index.jsp";
-            case "giaovien" -> "/view/teacher/index.jsp";
-            default -> "/view/admin/profile.jsp";
-        };
-
-        if (!result.verified) {
-            req.setAttribute("error", "Mật khẩu hiện tại không đúng!");
-            req.getRequestDispatcher(redirectPage).forward(req, resp);
-            return;
-        }
-
-        if (!newPassword.equals(confirmPassword)) {
-            req.setAttribute("error", "Xác nhận mật khẩu không khớp!");
-            req.getRequestDispatcher(redirectPage).forward(req, resp);
-            return;
-        }
+//        if (!newPassword.equals(confirmPassword)) {
+//            req.setAttribute("error", "Xác nhận mật khẩu không khớp!");
+//            req.getRequestDispatcher(redirectPage).forward(req, resp);
+//            return;
+//        }
         String hashedNewPassword = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
         loginDAO.updatePassByUserId(id, hashedNewPassword);
         resp.sendRedirect(req.getContextPath() + "/login?changeSuccess=true");

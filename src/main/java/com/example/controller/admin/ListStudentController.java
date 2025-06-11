@@ -1,7 +1,8 @@
 package com.example.controller.admin;
 
 import com.example.dao.UserDAO;
-import com.example.model.Users;
+import com.example.model.Student;
+import com.example.model.Teacher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/admin/sinhvien")
@@ -27,7 +27,7 @@ public class ListStudentController extends HttpServlet {
         }
 
         UserDAO userDAO = new UserDAO();
-        List<Users> usersList = userDAO.searchStudent(keyword, (page - 1) * recordsPerPage, recordsPerPage);
+        List<Student> usersList = userDAO.searchStudent(keyword, (page - 1) * recordsPerPage, recordsPerPage);
         int totalRecords = userDAO.countStudent(keyword);
         int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
 

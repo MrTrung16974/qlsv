@@ -19,7 +19,7 @@
 
 				<div class="search-container">
 					<form method="get"
-						action="${pageContext.request.contextPath}/list-user">
+						action="${pageContext.request.contextPath}/admin/list-user">
 						<input type="text" name="keyword" class="search-input"
 							placeholder="Tìm kiếm theo tên..." value="${keyword}">
 						<button class="btn-search" type="submit">Tìm</button>
@@ -47,10 +47,7 @@
 								<th>Tên</th>
 								<th>SĐT</th>
 								<th>Email</th>
-								<th>Địa chỉ</th>
 								<th>Ngày sinh</th>
-								<th>Chức vụ</th>
-								<th>Vị trí</th>
 								<th>Trạng thái</th>
 								<th>Thao tác</th>
 							</tr>
@@ -64,16 +61,9 @@
 									<td>${user.name}</td>
 									<td>${user.phone}</td>
 									<td>${user.email}</td>
-									<td>${user.address}</td>
 									<td>${user.dateOfBirth}</td>
-									<td>${user.type == 'giaovien' ? 'Giáo viên' : ''}</td>
-									<td><c:choose>
-											<c:when test="${user.typePosition == 'giang_vien'}">Giảng viên</c:when>
-											<c:when test="${user.typePosition == 'thinh_giang'}">Thỉnh giảng</c:when>
-											<c:otherwise>Không xác định</c:otherwise>
-										</c:choose></td>
 									<c:choose>
-										<c:when test="${user.lockStatus}">
+										<c:when test="${user.status}">
 											<td class="text-danger">Đã khóa</td>
 										</c:when>
 										<c:otherwise>
@@ -88,7 +78,7 @@
 												class="fa-regular fa-pen-to-square"></i>
 											</a>
 											<c:choose>
-												<c:when test="${user.lockStatus}">
+												<c:when test="${user.status}">
 
 													<a href="#" class="text-danger"
 														onclick="confirmUnlock('${user.id}')"> <i
@@ -217,36 +207,8 @@
 													class="form-control" name="email" required>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label">Địa chỉ</label> <input type="text"
-													class="form-control" name="diachi" required>
-											</div>
-											<div class="col-md-6">
 												<label class="form-label">Ngày sinh</label> <input
 													type="date" class="form-control" name="ngaysinh" required>
-											</div>
-											<div class="col-md-6">
-												<label class="form-label">Ngày bắt đầu</label> <input
-													type="date" class="form-control" name="starttime" required>
-											</div>
-											<div class="col-md-6">
-												<label class="form-label">Ngày kết thúc</label> <input
-													type="date" class="form-control" name="endtime" required>
-											</div>
-											<div class="col-md-6">
-												<label class="form-label">Chức vụ</label> <select
-													id="chucVu" name="chucVu" class="form-select" required>
-													<option value="">Chọn...</option>
-													<option value="giaovien">Giáo Viên</option>
-												</select>
-											</div>
-											<div class="col-md-6">
-												<label class="form-label">Loại chức vụ</label> <select
-													id="loaiChucVu" name="loaiChucVu" class="form-select"
-													required>
-													<option value="">Chọn...</option>
-													<option value="giang_vien">Giảng viên</option>
-													<option value="thinh_giang">Thỉnh giảng</option>
-												</select>
 											</div>
 										</div>
 										<div class="mt-4 text-end">

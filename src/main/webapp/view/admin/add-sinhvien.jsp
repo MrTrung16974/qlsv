@@ -46,22 +46,6 @@
 								<label class="form-label">Ngày kết thúc</label>
 								<input type="date" class="form-control" name="endtime" required>
 							</div>
-							<div class="col-md-6">
-								<label class="form-label">Chức vụ</label>
-								<select id="chucVu" name="chucVu" class="form-select" required>
-									<option selected>Chọn...</option>
-									<option value="sinhvien">Sinh Viên</option>
-								</select>
-							</div>
-
-							<div class="col-md-6">
-								<label class="form-label">Loại chức vụ</label>
-								<select id="loaiChucVu" name="loaiChucVu" class="form-select" required>
-									<option value="">Chọn...</option>
-									<option value="lien_thong">Liên thông</option>
-									<option value="chinh_quy">Chính quy</option>
-								</select>
-							</div>
 
 							<!-- Nút Thêm mới và Thoát -->
 							<div class="col-12">

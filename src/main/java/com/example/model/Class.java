@@ -10,7 +10,7 @@ public class Class {
     private Date lastModified;
     private boolean deleted;
     private boolean status;
-    private Users teacher;
+    private Teacher teacher;
 
 
     public String getId() {
@@ -69,15 +69,15 @@ public class Class {
         this.status = status;
     }
 
-    public Users getTeacher() {
+    public Teacher getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(Users teacher) {
+    public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
 
-    public Class(String id, String name, String description, Date createdAt, Date lastModified, boolean deleted, boolean status, Users teacher) {
+    public Class(String id, String name, String description, Date createdAt, Date lastModified, boolean deleted, boolean status, Teacher teacher) {
         this.id = id;
         this.name = name;
         this.description = description;

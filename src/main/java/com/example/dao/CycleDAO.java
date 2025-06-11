@@ -11,21 +11,21 @@ import java.util.List;
 public class CycleDAO extends DBConnect{
     public List<Cycle> getAll() {
         List<Cycle> cycleList = new ArrayList<>();
-        String sql = "SELECT * FROM cycle WHERE deleted = 0";
+        String sql = "SELECT * FROM CYCLE WHERE DELETED = 0";
         try {
             PreparedStatement pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Cycle cycle = new Cycle();
-                cycle.setId(rs.getString("id"));
-                cycle.setName(rs.getString("name"));
-                cycle.setDescription(rs.getString("description"));
-                cycle.setStartDate(rs.getDate("start_date"));
-                cycle.setEndDate(rs.getDate("end_date"));
-                cycle.setCreateAt(rs.getDate("created_at"));
-                cycle.setLastmodified(rs.getDate("lastmodified"));
-                cycle.setDeleted(rs.getBoolean("deleted"));
-                cycle.setStatus(rs.getBoolean("status"));
+                cycle.setId(rs.getString("ID"));
+                cycle.setName(rs.getString("NAME"));
+                cycle.setDescription(rs.getString("DESCRIPTION"));
+                cycle.setStartDate(rs.getDate("START_DATE"));
+                cycle.setEndDate(rs.getDate("END_DATE"));
+                cycle.setCreateAt(rs.getDate("CREATED_AT"));
+                cycle.setLastmodified(rs.getDate("LASTMODIFIED"));
+                cycle.setDeleted(rs.getBoolean("DELETED"));
+                cycle.setStatus(rs.getBoolean("STATUS"));
                 cycleList.add(cycle);
             }
         } catch (SQLException e) {
@@ -35,20 +35,19 @@ public class CycleDAO extends DBConnect{
     }
     public List<Cycle> getCyclesByStudentId(String studentId) {
         List<Cycle> list = new ArrayList<>();
-        String sql = "SELECT DISTINCT c.id, c.name " +
-                "FROM cycle c " +
-                "JOIN subject s ON c.id = s.cycle_id " +
-                "JOIN score_subject ss ON ss.subject_id = s.id " +
-                "JOIN score sc ON sc.id = ss.score_id " +
-                "WHERE sc.user_id = ?";
+        String sql = "SELECT DISTINCT c.ID, c.NAME " +
+                "FROM CYCLE c " +
+                "JOIN SUBJECT s ON c.ID = s.CYCLE_ID " +
+                "JOIN SCORE_SUBJECT ss ON ss.SUBJECT_ID = s.ID " +
+                "WHERE ss.STUDENT_ID = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, studentId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Cycle cycle = new Cycle();
-                cycle.setId(rs.getString("id"));
-                cycle.setName(rs.getString("name"));
+                cycle.setId(rs.getString("ID"));
+                cycle.setName(rs.getString("NAME"));
                 list.add(cycle);
             }
         } catch (SQLException e) {
@@ -57,22 +56,22 @@ public class CycleDAO extends DBConnect{
         return list;
     }
     public Cycle findById(String id) {
-        String sql = "SELECT * FROM cycle WHERE id = ?";
+        String sql = "SELECT * FROM CYCLE WHERE ID = ?";
         try {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 Cycle cycle = new Cycle();
-                cycle.setId(rs.getString("id"));
-                cycle.setName(rs.getString("name"));
-                cycle.setDescription(rs.getString("description"));
-                cycle.setStartDate(rs.getDate("start_date"));
-                cycle.setEndDate(rs.getDate("end_date"));
-                cycle.setCreateAt(rs.getDate("created_at"));
-                cycle.setLastmodified(rs.getDate("lastmodified"));
-                cycle.setDeleted(rs.getBoolean("deleted"));
-                cycle.setStatus(rs.getBoolean("status"));
+                cycle.setId(rs.getString("ID"));
+                cycle.setName(rs.getString("NAME"));
+                cycle.setDescription(rs.getString("DESCRIPTION"));
+                cycle.setStartDate(rs.getDate("START_DATE"));
+                cycle.setEndDate(rs.getDate("END_DATE"));
+                cycle.setCreateAt(rs.getDate("CREATED_AT"));
+                cycle.setLastmodified(rs.getDate("LASTMODIFIED"));
+                cycle.setDeleted(rs.getBoolean("DELETED"));
+                cycle.setStatus(rs.getBoolean("STATUS"));
                 return cycle;
             }
         } catch (SQLException e) {

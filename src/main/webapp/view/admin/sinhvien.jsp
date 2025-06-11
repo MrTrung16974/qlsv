@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="vi">
 <%@ include file="layout/head.jsp"%>
 <body>
@@ -41,14 +42,13 @@
 						<thead>
 							<tr>
 								<th>STT</th>
-								<th>Mã GV</th>
+								<th>Mã SV</th>
 								<th>Tên</th>
 								<th>SĐT</th>
 								<th>Email</th>
 								<th>Địa chỉ</th>
 								<th>Ngày sinh</th>
-								<th>Chức vụ</th>
-								<th>Vị trí</th>
+								<th>Khóa học</th>
 								<th>Trạng thái</th>
 								<th>Thao tác</th>
 							</tr>
@@ -64,14 +64,11 @@
 									<td>${user.email}</td>
 									<td>${user.address}</td>
 									<td>${user.dateOfBirth}</td>
-									<td>${user.type == 'sinhvien' ? 'Sinh viên' : ''}</td>
-									<td><c:choose>
-											<c:when test="${user.typePosition == 'lien_thong'}">Liên thông</c:when>
-											<c:when test="${user.typePosition == 'chinh_quy'}">Chính quy</c:when>
-											<c:otherwise>Không xác định</c:otherwise>
-										</c:choose></td>
+									<td>
+									    <fmt:formatDate value="${user.startYear}" pattern="yyyy" />-<fmt:formatDate value="${user.endYear}" pattern="yyyy" />
+									</td>
 									<c:choose>
-										<c:when test="${user.lockStatus}">
+										<c:when test="${user.status}">
 											<td class="text-danger">Đã khóa</td>
 										</c:when>
 										<c:otherwise>
@@ -91,7 +88,7 @@
 													class="fa-regular fa-pen-to-square"></i>
 												</a>
 												<c:choose>
-													<c:when test="${user.lockStatus}">
+													<c:when test="${user.status}">
 
 														<a href="#" class="text-danger"
 															onclick="confirmUnlock('${user.id}')"> <i

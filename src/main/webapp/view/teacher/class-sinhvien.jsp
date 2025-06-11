@@ -36,12 +36,12 @@
 							<c:forEach items="${requestScope.c}" var="c" varStatus="status">
 								<tr>
 									<td>${status.index + 1}</td>
-									<td>${c.users.id}</td>
-									<td>${c.users.name}</td>
-									<td>${c.users.address}</td>
+									<td>${c.student.id}</td>
+									<td>${c.student.name}</td>
+									<td>${c.student.address}</td>
 									<td>
 									   <div class="action-icons">
-										<a class="text-success" data-toggle="tooltip" title="Thông tin điểm sinh viên" href="${pageContext.request.contextPath}/teacher/diem-sinhvien?studentId=${c.users.id}"><i class="fa-solid fa-table"></i></a>
+										<a class="text-success" data-toggle="tooltip" title="Thông tin điểm sinh viên" href="${pageContext.request.contextPath}/teacher/diem-sinhvien?studentId=${c.student.id}"><i class="fa-solid fa-table"></i></a>
 									   </div>
 									</td>
 								</tr>

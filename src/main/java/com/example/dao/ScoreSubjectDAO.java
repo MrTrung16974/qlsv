@@ -11,28 +11,26 @@ public class ScoreSubjectDAO extends DBConnect {
     public List<ScoreSubject> getScoreSubjectByTeacherAndStudent(String teacherId, String studentId) {
         List<ScoreSubject> scoreSubjects = new ArrayList<>();
         String sql = "SELECT DISTINCT " +
-                "    u.id AS student_id, " +
-                "    u.name AS student_name, " +
-                "    s.id AS subject_id, " +
-                "    s.name AS subject_name, " +
-                "    s.start_date AS subject_start_date, " +
-                "    s.end_date AS subject_end_date, " +
-                "    COALESCE(ss.score_laborious, 0.0) AS score_laborious, " +
-                "    COALESCE(ss.score_check, 0.0) AS score_check, " +
-                "    COALESCE(ss.score_final, 0.0) AS score_final, " +
-                "    COALESCE(ss.score_average, 0.0) AS score_average, " +
-                "    ss.id AS score_subject_id " +
-                "FROM class_user cu " +
-                "JOIN users u ON u.id = cu.student_id " +
-                "JOIN class c ON c.id = cu.class_id " +
-                "JOIN subject s ON s.user_id = c.teacher_id " +
-                "LEFT JOIN score_subject ss ON ss.subject_id = s.id AND ss.score_id IN (SELECT id FROM score WHERE user_id = u.id AND deleted = 0) " +
-                "LEFT JOIN score sc ON sc.id = ss.score_id AND sc.user_id = u.id " +
-                "WHERE u.id = ? " +
-                "  AND c.teacher_id = ? " +
-                "  AND u.deleted = 0 " +
-                "  AND c.deleted = 0 " +
-                "  AND s.deleted = 0 ";
+                "    st.ID AS student_id, " +
+                "    st.NAME AS student_name, " +
+                "    sb.ID AS subject_id, " +
+                "    sb.NAME AS subject_name, " +
+                "    sb.START_DATE AS subject_start_date, " +
+                "    sb.END_DATE AS subject_end_date, " +
+                "    COALESCE(ss.SCORE_PROCESS, 0.0) AS score_process, " +
+                "    COALESCE(ss.SCORE_FINAL, 0.0) AS score_final, " +
+                "    COALESCE(ss.SCORE_AVERAGE, 0.0) AS score_average, " +
+                "    ss.ID AS score_subject_id " +
+                "FROM QLSV.CLASS_STUDENT cs " +
+                "JOIN QLSV.STUDENT st ON st.ID = cs.STUDENT_ID " +
+                "JOIN QLSV.CLASS c ON c.ID = cs.CLASS_ID " +
+                "JOIN QLSV.SUBJECT sb ON sb.TEACHER_ID = c.TEACHER_ID " +
+                "LEFT JOIN QLSV.SCORE_SUBJECT ss ON ss.STUDENT_ID = st.ID AND ss.SUBJECT_ID = sb.ID " +
+                "WHERE st.ID = ? " +
+                "  AND c.TEACHER_ID = ? " +
+                "  AND st.DELETED = 0 " +
+                "  AND c.DELETED = 0 " +
+                "  AND sb.DELETED = 0";
 
         try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, studentId);
@@ -46,20 +44,16 @@ public class ScoreSubjectDAO extends DBConnect {
                     subject.setStartDate(rs.getDate("subject_start_date"));
                     subject.setEndDate(rs.getDate("subject_end_date"));
 
-                    Users user = new Users();
+                   Student user = new Student();
                     user.setId(rs.getString("student_id"));
                     user.setName(rs.getString("student_name"));
 
-                    Score score = new Score();
-                    score.setUsers(user);
-
                     ScoreSubject scoreSubject = new ScoreSubject();
                     scoreSubject.setId(rs.getString("score_subject_id"));
-                    scoreSubject.setScoreLaborious(rs.getDouble("score_laborious"));
-                    scoreSubject.setScoreCheck(rs.getDouble("score_check"));
+                    scoreSubject.setScoreProcess(rs.getDouble("score_process"));
                     scoreSubject.setScoreFinal(rs.getDouble("score_final"));
                     scoreSubject.setScore_average(rs.getDouble("score_average"));
-                    scoreSubject.setScore(score);
+                    scoreSubject.setStudent(user);
                     scoreSubject.setSubject(subject);
                     scoreSubjects.add(scoreSubject);
                 }
@@ -72,23 +66,24 @@ public class ScoreSubjectDAO extends DBConnect {
     }
 
     public ScoreSubject findById(String id) {
-        String sql = "select * from score_subject where id = ?";
+        String sql = "select * from SCORE_SUBJECT where ID = ?";
         try {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                Score score = new Score();
-                score.setId(rs.getString("score_id"));
                 Subject subject = new Subject();
-                subject.setId(rs.getString("subject_id"));
+                subject.setId(rs.getString("SUBJECT_ID"));
+                Student student = new UserDAO().findStudentById(rs.getString("STUDENT_ID"));
                 ScoreSubject scoreSubject = new ScoreSubject(
-                        rs.getString("id"),
-                        rs.getDouble("score_laborious"),
-                        rs.getDouble("score_check"),
-                        rs.getDouble("score_final"),
-                        rs.getDouble("score_average"),
-                        score, subject);
+                        rs.getString("ID"),
+                        rs.getDouble("SCORE_PROCESS"),
+                        rs.getDouble("SCORE_FINAL"),
+                        rs.getDouble("SCORE_AVERAGE"),
+                        rs.getDate("CREATED_AT"),
+                        rs.getDate("LASTMODIFIED"),
+                        rs.getBoolean("DELETED"),
+                        subject, student);
                 return scoreSubject;
             }
         } catch (SQLException e) {
@@ -98,21 +93,23 @@ public class ScoreSubjectDAO extends DBConnect {
     }
 
     public void addScoreSubject(ScoreSubject scoreSubject) {
-        String sql = "INSERT INTO score_subject (id, score_laborious, score_check, score_final,score_average, score_id, subject_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO SCORE_SUBJECT (ID, SCORE_PROCESS, SCORE_FINAL,SCORE_AVERAGE,CREATED_AT ,LASTMODIFIED, DELETED, STUDENT_ID, SUBJECT_ID) " +
+                "VALUES (?, ?, ?, ?, ?, ?,?,?,?)";
 
         try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, scoreSubject.getId());
-            pst.setDouble(2, scoreSubject.getScoreLaborious());
-            pst.setDouble(3, scoreSubject.getScoreCheck());
-            pst.setDouble(4, scoreSubject.getScoreFinal());
-            pst.setDouble(5, scoreSubject.getScore_average());
-            if (scoreSubject.getScore() != null && scoreSubject.getScore().getId() != null) {
-                pst.setString(6, scoreSubject.getScore().getId());
+            pst.setDouble(2, scoreSubject.getScoreProcess());
+            pst.setDouble(3, scoreSubject.getScoreFinal());
+            pst.setDouble(4, scoreSubject.getScore_average());
+            pst.setDate(5,scoreSubject.getCreateAt());
+            pst.setDate(6,scoreSubject.getLassmodified());
+            pst.setBoolean(7,scoreSubject.isDeleted());
+            if (scoreSubject.getStudent() != null && scoreSubject.getStudent().getId() != null) {
+                pst.setString(8, scoreSubject.getStudent().getId());
             } else {
-                pst.setNull(6, Types.VARCHAR);
+                pst.setNull(8, Types.VARCHAR);
             }
-            pst.setString(7, scoreSubject.getSubject().getId());
+            pst.setString(9, scoreSubject.getSubject().getId());
             pst.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,22 +117,22 @@ public class ScoreSubjectDAO extends DBConnect {
     }
 
     public void updateScoreSubject(ScoreSubject scoreSubject) {
-        String sql = "UPDATE score_subject SET " +
-                "score_laborious = ?, " +
-                "score_check = ?, " +
-                "score_final = ?, " +
-                "score_average = ?, " +
-                "score_id = ?, " +
-                "subject_id = ? " +
-                "WHERE id = ?";
+        String sql = "UPDATE SCORE_SUBJECT SET " +
+                "SCORE_PROCESS = ?, " +
+                "SCORE_FINAL = ?, " +
+                "SCORE_AVERAGE = ?, " +
+                "LASTMODIFIED = ?, "+
+                "SUBJECT_ID = ?, " +
+                "STUDENT_ID = ? " +
+                "WHERE ID = ?";
 
         try (PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setDouble(1, scoreSubject.getScoreLaborious());
-            pst.setDouble(2, scoreSubject.getScoreCheck());
-            pst.setDouble(3, scoreSubject.getScoreFinal());
-            pst.setDouble(4, scoreSubject.getScore_average());
-            pst.setString(5, scoreSubject.getScore().getId());
-            pst.setString(6, scoreSubject.getSubject().getId());
+            pst.setDouble(1, scoreSubject.getScoreProcess());
+            pst.setDouble(2, scoreSubject.getScoreFinal());
+            pst.setDouble(3, scoreSubject.getScore_average());
+            pst.setDate(4, scoreSubject.getLassmodified());
+            pst.setString(5, scoreSubject.getSubject().getId());
+            pst.setString(6,scoreSubject.getStudent().getId());
             pst.setString(7, scoreSubject.getId());
 
             pst.executeUpdate();
@@ -147,18 +144,17 @@ public class ScoreSubjectDAO extends DBConnect {
     public List<ScoreSubject> getScoreSubjectByStudentId(String id) {
         List<ScoreSubject> list = new ArrayList<>();
         String sql = "SELECT " +
-                "subj.name AS subject_name, " +
-                "c.name AS semester_name, " +
-                "ss.score_laborious, " +
-                "ss.score_check, " +
-                "ss.score_final, " +
-                "subj.process_coefficient, " +
-                "subj.exam_coefficient " +
-                "FROM score_subject ss " +
-                "JOIN subject subj ON ss.subject_id = subj.id " +
-                "JOIN cycle c ON subj.cycle_id = c.id " +
-                "JOIN score sc ON ss.score_id = sc.id " +
-                "WHERE sc.user_id = ?";
+                "subj.NAME AS subject_name, " +
+                "c.NAME AS semester_name, " +
+                "ss.SCORE_PROCESS, " +
+                "ss.SCORE_FINAL, " +
+                "ss.SCORE_AVERAGE, " +
+                "subj.PROCESS_COEFFICIENT, " +
+                "subj.EXAM_COEFFICIENT " +
+                "FROM SCORE_SUBJECT ss " +
+                "JOIN SUBJECT subj ON ss.SUBJECT_ID = subj.ID " +
+                "JOIN CYCLE c ON subj.CYCLE_ID = c.ID " +
+                "WHERE ss.STUDENT_ID = ?";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -167,17 +163,17 @@ public class ScoreSubjectDAO extends DBConnect {
             while (rs.next()) {
                 Subject subject = new Subject();
                 subject.setName(rs.getString("subject_name"));
-                subject.setProcessCoefficient(rs.getDouble("process_coefficient"));
-                subject.setExamCoefficient(rs.getDouble("exam_coefficient"));
+                subject.setProcessCoefficient(rs.getDouble("PROCESS_COEFFICIENT"));
+                subject.setExamCoefficient(rs.getDouble("EXAM_COEFFICIENT"));
 
                 Cycle cycle = new Cycle();
                 cycle.setName(rs.getString("semester_name"));
                 subject.setCycle(cycle);
 
                 ScoreSubject ss = new ScoreSubject();
-                ss.setScoreLaborious(rs.getDouble("score_laborious"));
-                ss.setScoreCheck(rs.getDouble("score_check"));
-                ss.setScoreFinal(rs.getDouble("score_final"));
+                ss.setScoreProcess(rs.getDouble("SCORE_PROCESS"));
+                ss.setScoreFinal(rs.getDouble("SCORE_FINAL"));
+                ss.setScore_average(rs.getDouble("SCORE_AVERAGE"));
                 ss.setSubject(subject);
 
                 list.add(ss);
@@ -192,18 +188,17 @@ public class ScoreSubjectDAO extends DBConnect {
     public List<ScoreSubject> getScoreSubjectByStudentIdAndCycleId(String id, String cycleId) {
         List<ScoreSubject> list = new ArrayList<>();
         String sql = "SELECT " +
-                "subj.name AS subject_name, " +
-                "c.name AS semester_name, " +
-                "ss.score_laborious, " +
-                "ss.score_check, " +
-                "ss.score_final, " +
-                "subj.process_coefficient, " +
-                "subj.exam_coefficient " +
-                "FROM score_subject ss " +
-                "JOIN subject subj ON ss.subject_id = subj.id " +
-                "JOIN cycle c ON subj.cycle_id = c.id " +
-                "JOIN score sc ON ss.score_id = sc.id " +
-                "WHERE sc.user_id = ? and c.id = ?";
+                "subj.NAME AS subject_name, " +
+                "c.NAME AS semester_name, " +
+                "ss.SCORE_PROCESS, " +
+                "ss.SCORE_FINAL, " +
+                "ss.SCORE_AVERAGE, " +
+                "subj.PROCESS_COEFFICIENT, " +
+                "subj.EXAM_COEFFICIENT " +
+                "FROM SCORE_SUBJECT ss " +
+                "JOIN SUBJECT subj ON ss.SUBJECT_ID = subj.ID " +
+                "JOIN CYCLE c ON subj.CYCLE_ID = c.ID " +
+                "WHERE ss.STUDENT_ID = ? and c.ID = ?";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -213,17 +208,17 @@ public class ScoreSubjectDAO extends DBConnect {
             while (rs.next()) {
                 Subject subject = new Subject();
                 subject.setName(rs.getString("subject_name"));
-                subject.setProcessCoefficient(rs.getDouble("process_coefficient"));
-                subject.setExamCoefficient(rs.getDouble("exam_coefficient"));
+                subject.setProcessCoefficient(rs.getDouble("PROCESS_COEFFICIENT"));
+                subject.setExamCoefficient(rs.getDouble("EXAM_COEFFICIENT"));
 
                 Cycle cycle = new Cycle();
                 cycle.setName(rs.getString("semester_name"));
                 subject.setCycle(cycle);
 
                 ScoreSubject ss = new ScoreSubject();
-                ss.setScoreLaborious(rs.getDouble("score_laborious"));
-                ss.setScoreCheck(rs.getDouble("score_check"));
-                ss.setScoreFinal(rs.getDouble("score_final"));
+                ss.setScoreProcess(rs.getDouble("SCORE_PROCESS"));
+                ss.setScoreFinal(rs.getDouble("SCORE_FINAL"));
+                ss.setScore_average(rs.getDouble("SCORE_AVERAGE"));
                 ss.setSubject(subject);
 
                 list.add(ss);
@@ -235,142 +230,27 @@ public class ScoreSubjectDAO extends DBConnect {
         return list;
     }
 
-    public ScoreSubject getScoreByClassAndStudent(String classId, String studentId) {
-        String sql = "SELECT " +
-                "u.id AS student_id, " +
-                "u.name AS student_name, " +
-                "s.id AS subject_id, " +
-                "s.name AS subject_name, " +
-                "s.process_coefficient AS subject_process_coefficient, " +
-                "s.exam_coefficient AS subject_exam_coefficient,  " +
-                "ss.* " +
-                "FROM class_user cu " +
-                "JOIN users u ON cu.student_id = u.id " +
-                "JOIN class c ON cu.class_id = c.id " +
-                "JOIN subject s ON c.subject_id = s.id " +
-                "LEFT JOIN score sc ON sc.user_id = u.id " +
-                "LEFT JOIN score_subject ss ON ss.score_id = sc.id AND ss.subject_id = s.id " +
-                "WHERE cu.class_id = ? AND u.id = ?";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, classId);
-            ps.setString(2, studentId);
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                Subject subject = new Subject();
-                subject.setId(rs.getString("subject_id"));
-                subject.setName(rs.getString("subject_name"));
-                subject.setProcessCoefficient(rs.getDouble("subject_process_coefficient"));
-                subject.setExamCoefficient(rs.getDouble("subject_exam_coefficient"));
-                Users user = new Users();
-                user.setId(rs.getString("student_id"));
-                user.setName(rs.getString("student_name"));
-
-                Score score = new Score();
-                score.setUsers(user);
-
-                ScoreSubject ss = new ScoreSubject();
-                ss.setScoreLaborious(rs.getDouble("score_laborious"));
-                ss.setScoreCheck(rs.getDouble("score_check"));
-                ss.setScoreFinal(rs.getDouble("score_final"));
-                ss.setScore_average(rs.getDouble("score_average"));
-                ss.setSubject(subject);
-                ss.setScore(score);
-
-                return ss;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Lỗi truy vấn điểm sinh viên", e);
-        }
-
-        return null;
-    }
-
-    public ScoreSubject getScoreSubjectBySubjectId(String subjectId) {
-        ScoreSubject scoreSubject = null;
-        String sql = "SELECT * FROM score_subject WHERE subject_id = ?";
-
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, subjectId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                Subject subject = new SubjectDAO().findById(rs.getString("subject_id"));
-                scoreSubject = new ScoreSubject(
-                        rs.getString("id"),
-                        rs.getDouble("score_laborious"),
-                        rs.getDouble("score_check"),
-                        rs.getDouble("score_final"),
-                        rs.getDouble("score_average"),
-                        null,
-                        subject
-                );
-                return scoreSubject;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public String getEndDate(String scoreSubjectId) {
-        String sql = "SELECT end_date FROM score_subject WHERE id = ?";
-        String endDateStr = "";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, scoreSubjectId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Date endDate = rs.getDate("end_date");
-                if (endDate != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    endDateStr = sdf.format(endDate);
-                } else {
-                    endDateStr = "Không có thông tin thời gian sửa điểm";
-                }
-            } else {
-                endDateStr = "Không tìm thấy thông tin thời gian sửa điểm";
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            endDateStr = "Lỗi khi truy vấn dữ liệu";
-        }
-        return endDateStr;
-    }
-
     public List<ScoreSubject> getScoreSubjectByClassAndStudent(String classId, String studentId) {
         List<ScoreSubject> scoreSubjects = new ArrayList<>();
         String sql = "SELECT " +
-                "    u.id AS student_id, " +
-                "    u.name AS student_name, " +
-                "    s.id AS subject_id, " +
-                "    s.name AS subject_name, " +
-                "    s.start_date AS subject_start_date, " +
-                "    s.end_date AS subject_end_date, " +
-                "    COALESCE(ss.score_laborious, 0.0) AS score_laborious, " +
-                "    COALESCE(ss.score_check, 0.0) AS score_check, " +
-                "    COALESCE(ss.score_final, 0.0) AS score_final, " +
-                "    COALESCE(ss.score_average, 0.0) AS score_average, " +
-                "    ss.id AS score_subject_id " +
-                "FROM class_user cu " +
-                "JOIN users u ON u.id = cu.student_id " +
-                "JOIN class c ON c.id = cu.class_id " +
-                "JOIN subject s ON s.user_id = c.teacher_id " +
-                "LEFT JOIN score_subject ss ON ss.subject_id = s.id AND ss.score_id IN ( " +
-                "    SELECT sc.id " +
-                "    FROM score sc " +
-                "    WHERE sc.user_id = u.id AND sc.deleted = 0 " +
-                ") " +
-                "WHERE u.id = ? " +
-                "  AND c.id = ? " +
-                "  AND c.deleted = 0 " +
-                "  AND u.deleted = 0 " +
-                "  AND s.deleted = 0 ";
-
+                "    u.ID AS student_id, " +
+                "    u.NAME AS student_name, " +
+                "    s.ID AS subject_id, " +
+                "    s.NAME AS subject_name, " +
+                "    COALESCE(ss.SCORE_PROCESS, 0) AS score_laborious, " +
+                "    COALESCE(ss.SCORE_FINAL, 0) AS score_final, " +
+                "    COALESCE(ss.SCORE_AVERAGE, 0) AS score_average, " +
+                "    ss.ID AS score_subject_id " +
+                "FROM CLASS_STUDENT cs " +
+                "JOIN STUDENT u ON u.ID = cs.STUDENT_ID " +
+                "JOIN CLASS c ON c.ID = cs.CLASS_ID " +
+                "JOIN SUBJECT s ON s.TEACHER_ID = c.TEACHER_ID " +
+                "LEFT JOIN SCORE_SUBJECT ss ON ss.SUBJECT_ID = s.ID AND ss.STUDENT_ID = u.ID AND ss.DELETED = 0 " +
+                "WHERE u.ID = ? " +
+                "  AND c.ID = ? " +
+                "  AND u.DELETED = 0 " +
+                "  AND c.DELETED = 0 " +
+                "  AND s.DELETED = 0";
         try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, studentId);
             pst.setString(2, classId);
@@ -380,36 +260,30 @@ public class ScoreSubjectDAO extends DBConnect {
                     Subject subject = new Subject();
                     subject.setId(rs.getString("subject_id"));
                     subject.setName(rs.getString("subject_name"));
-                    subject.setStartDate(rs.getDate("subject_start_date"));
-                    subject.setEndDate(rs.getDate("subject_end_date"));
 
-                    Users user = new Users();
+                    Student user = new Student();
                     user.setId(rs.getString("student_id"));
                     user.setName(rs.getString("student_name"));
 
-                    Score score = new Score();
-                    score.setUsers(user);
-
                     ScoreSubject scoreSubject = new ScoreSubject();
                     scoreSubject.setId(rs.getString("score_subject_id"));
-                    scoreSubject.setScoreLaborious(rs.getDouble("score_laborious"));
-                    scoreSubject.setScoreCheck(rs.getDouble("score_check"));
+                    scoreSubject.setScoreProcess(rs.getDouble("score_laborious"));
                     scoreSubject.setScoreFinal(rs.getDouble("score_final"));
                     scoreSubject.setScore_average(rs.getDouble("score_average"));
-                    scoreSubject.setScore(score);
+                    scoreSubject.setStudent(user);
                     scoreSubject.setSubject(subject);
                     scoreSubjects.add(scoreSubject);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi truy vấn điểm sinh viên theo giáo viên", e);
+            throw new RuntimeException("Lỗi khi truy vấn điểm sinh viên ", e);
         }
 
         return scoreSubjects;
     }
 
     public void deleteScoreSubjectById(String id) {
-        String sql = "DELETE FROM score_subject WHERE id = ?";
+        String sql = "DELETE FROM SCORE_SUBJECT WHERE ID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, id);
@@ -420,9 +294,7 @@ public class ScoreSubjectDAO extends DBConnect {
     }
 
     public List<ScoreSubject> findScoresByStudentId(String studentId) throws SQLException {
-        String sql = "SELECT ss.* FROM score_subject ss " +
-                "JOIN score sc ON ss.score_id = sc.id " +
-                "WHERE sc.user_id = ? AND sc.deleted = 0";
+        String sql = "SELECT * FROM SCORE_SUBJECT WHERE STUDENT_ID = ? AND DELETED = 0";
 
         List<ScoreSubject> scores = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -432,15 +304,14 @@ public class ScoreSubjectDAO extends DBConnect {
 
             while (rs.next()) {
                 ScoreSubject ss = new ScoreSubject();
-                Score score = new ScoreDAO().findById(rs.getString("score_id"));
-                Subject subject = new SubjectDAO().findById(rs.getString("subject_id"));
-                ss.setId(rs.getString("id"));
-                ss.setScoreLaborious(rs.getDouble("score_laborious"));
-                ss.setScoreCheck(rs.getDouble("score_check"));
-                ss.setScoreFinal(rs.getDouble("score_final"));
-                ss.setScore_average(rs.getDouble("score_average"));
-                ss.setScore(score);
+                Student student = new UserDAO().findStudentById(rs.getString("STUDENT_ID"));
+                Subject subject = new SubjectDAO().findById(rs.getString("SUBJECT_ID"));
+                ss.setId(rs.getString("ID"));
+                ss.setScoreProcess(rs.getDouble("SCORE_PROCESS"));
+                ss.setScoreFinal(rs.getDouble("SCORE_FINAL"));
+                ss.setScore_average(rs.getDouble("SCORE_AVERAGE"));
                 ss.setSubject(subject);
+                ss.setStudent(student);
                 scores.add(ss);
             }
         }

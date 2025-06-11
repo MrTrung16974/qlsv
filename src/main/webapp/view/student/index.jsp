@@ -27,31 +27,15 @@
 										<div class="col-lg-9 col-md-8">${st.name}</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-3 col-md-4 label">Chức vụ</div>
-										<div class="col-lg-9 col-md-8">
-											<c:choose>
-												<c:when test="${st.type == 'giaovien'}">
-													Giáo viên
-												</c:when>
-												<c:when test="${st.type == 'sinhvien'}">
-                                                                                          Sinh viên
-                                                                                        </c:when>
-												<c:otherwise>
-                                                                                            ${t.type} 
-												</c:otherwise>
-											</c:choose>
-										</div>
-									</div>
-									<div class="row">
 										<div class="col-lg-3 col-md-4 label">Ngày sinh</div>
 										<div class="col-lg-9 col-md-8">${st.dateOfBirth}</div>
 									</div>
 									<div class="row">
 										<div class="col-lg-3 col-md-4 label">Khóa học</div>
 										<div class="col-lg-9 col-md-8">
-											<fmt:formatDate value="${st.startTime}" pattern="yyyy" />
+											<fmt:formatDate value="${st.startYear}" pattern="yyyy" />
 											-
-											<fmt:formatDate value="${st.endTime}" pattern="yyyy" />
+											<fmt:formatDate value="${st.endYear}" pattern="yyyy" />
 										</div>
 									</div>
 

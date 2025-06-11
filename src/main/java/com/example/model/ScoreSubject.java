@@ -4,12 +4,14 @@ import java.sql.Date;
 
 public class ScoreSubject {
     private String id;
-    private double scoreLaborious;
-    private double scoreCheck;
+    private double scoreProcess;
     private double scoreFinal;
     private double score_average;
-    private Score score;
+    private Date createAt;
+    private Date lassmodified;
+    private boolean deleted;
     private Subject subject;
+    private Student student;
 
     public String getId() {
         return id;
@@ -19,20 +21,12 @@ public class ScoreSubject {
         this.id = id;
     }
 
-    public double getScoreLaborious() {
-        return scoreLaborious;
+    public double getScoreProcess() {
+        return scoreProcess;
     }
 
-    public void setScoreLaborious(double scoreLaborious) {
-        this.scoreLaborious = scoreLaborious;
-    }
-
-    public double getScoreCheck() {
-        return scoreCheck;
-    }
-
-    public void setScoreCheck(double scoreCheck) {
-        this.scoreCheck = scoreCheck;
+    public void setScoreProcess(double scoreProcess) {
+        this.scoreProcess = scoreProcess;
     }
 
     public double getScoreFinal() {
@@ -43,12 +37,36 @@ public class ScoreSubject {
         this.scoreFinal = scoreFinal;
     }
 
-    public Score getScore() {
-        return score;
+    public double getScore_average() {
+        return score_average;
     }
 
-    public void setScore(Score score) {
-        this.score = score;
+    public void setScore_average(double score_average) {
+        this.score_average = score_average;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getLassmodified() {
+        return lassmodified;
+    }
+
+    public void setLassmodified(Date lassmodified) {
+        this.lassmodified = lassmodified;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public Subject getSubject() {
@@ -59,22 +77,24 @@ public class ScoreSubject {
         this.subject = subject;
     }
 
-    public double getScore_average() {
-        return score_average;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setScore_average(double score_average) {
-        this.score_average = score_average;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public ScoreSubject(String id, double scoreLaborious, double scoreCheck, double scoreFinal, double score_average, Score score, Subject subject) {
+    public ScoreSubject(String id, double scoreProcess, double scoreFinal, double score_average, Date createAt, Date lassmodified, boolean deleted, Subject subject, Student student) {
         this.id = id;
-        this.scoreLaborious = scoreLaborious;
-        this.scoreCheck = scoreCheck;
+        this.scoreProcess = scoreProcess;
         this.scoreFinal = scoreFinal;
         this.score_average = score_average;
-        this.score = score;
+        this.createAt = createAt;
+        this.lassmodified = lassmodified;
+        this.deleted = deleted;
         this.subject = subject;
+        this.student = student;
     }
 
     public ScoreSubject() {

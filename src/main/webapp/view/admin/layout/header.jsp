@@ -1,13 +1,11 @@
  <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
- <%
- 	if(session.getAttribute("name")==null){
- 		response.sendRedirect(request.getContextPath()+"/login");
- 	}
- 	String name = (String) session.getAttribute("name");
-     String type = (String) session.getAttribute("type");
-     String typePosition = (String) session.getAttribute("typeposition");
-     String id = (String) session.getAttribute("id");
- %>
+<%
+	if(session.getAttribute("name")==null){
+		response.sendRedirect(request.getContextPath()+"/login");
+	}
+	String name = (String) session.getAttribute("name");
+    String id = (String) session.getAttribute("id");
+%>
  <div class="header">
          <h1>HỆ THỐNG QUẢN LÝ ĐIỂM SINH VIÊN – KHOA CNTT</h1>
          <nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding: 0px;">
@@ -17,7 +15,7 @@
 
                  <li class="nav-item dropdown">
                    <a class="nav-link dropdown-toggle text-white" style="padding: 0px;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Xin chào : <%=name %>
+                    Xin chào :<%=name %>
                    </a>
                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left: 67px;margin-top: 15px;padding: 0;">
                      <li><a class="dropdown-item custom-hover" onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>

@@ -3,7 +3,7 @@ package com.example.controller.admin;
 import com.example.dao.ClassDAO;
 import com.example.dao.UserDAO;
 import com.example.model.Class;
-import com.example.model.Users;
+import com.example.model.Teacher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @WebServlet("/admin/update-lophoc")
 public class UpdateClassController extends HttpServlet {
@@ -22,7 +21,7 @@ public class UpdateClassController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         Class aClass = new ClassDAO().getById(id);
-        List<Users> teacher = new ArrayList<>();
+        List<Teacher> teacher = new ArrayList<>();
         teacher = new UserDAO().getAll();
         req.setAttribute("user",teacher);
         req.setAttribute("cl",aClass);
@@ -35,7 +34,7 @@ public class UpdateClassController extends HttpServlet {
         String id = req.getParameter("id");
         String name = req.getParameter("ten");
         String teacherId = req.getParameter("teacher");
-        Users teacher = new Users();
+        Teacher teacher = new Teacher();
         teacher.setId(teacherId);
         Class aClass = new Class();
         aClass.setId(id);

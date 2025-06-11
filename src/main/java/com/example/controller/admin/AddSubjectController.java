@@ -1,13 +1,11 @@
 package com.example.controller.admin;
 
 import com.example.dao.CycleDAO;
-import com.example.dao.ScoreSubjectDAO;
 import com.example.dao.SubjectDAO;
 import com.example.dao.UserDAO;
 import com.example.model.Cycle;
-import com.example.model.ScoreSubject;
 import com.example.model.Subject;
-import com.example.model.Users;
+import com.example.model.Teacher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,7 +22,7 @@ import java.util.UUID;
 public class AddSubjectController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Users> users = new ArrayList<>();
+        List<Teacher> users = new ArrayList<>();
         users = new UserDAO().getAll();
         List<Cycle> cycles = new ArrayList<>();
         cycles = new CycleDAO().getAll();
@@ -56,7 +54,7 @@ public class AddSubjectController extends HttpServlet {
         subject.setDeleted(false);
         subject.setStatus(false);
         if (teacherId != null && !teacherId.trim().isEmpty()){
-            Users teacher = new Users();
+            Teacher teacher = new Teacher();
             teacher.setId(teacherId);
             subject.setTeacher(teacher);
         }else {

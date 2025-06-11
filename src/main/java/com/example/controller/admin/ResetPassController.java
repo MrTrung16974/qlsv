@@ -4,8 +4,8 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.example.dao.LoginDAO;
 import com.example.dao.MailDAO;
 import com.example.dao.UserDAO;
-import com.example.model.Users;
-import jakarta.mail.MessagingException;
+import com.example.model.Student;
+import com.example.model.Teacher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,26 +20,48 @@ public class ResetPassController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
-        Users users = new UserDAO().findById(id);
+        UserDAO userDAO = new UserDAO();
+        Teacher teacher = userDAO.findById(id);
+
         try {
-            String plainPass = new SimpleDateFormat("yyyy-MM-dd").format(users.getDateOfBirth());
-            String hashedPass = BCrypt.withDefaults().hashToString(12, plainPass.toCharArray());
+            String plainPass;
+            String to;
+            if (teacher != null) {
+                plainPass = new SimpleDateFormat("yyyy-MM-dd").format(teacher.getDateOfBirth());
+                to = teacher.getEmail();
+                String hashedPass = BCrypt.withDefaults().hashToString(12, plainPass.toCharArray());
+                new LoginDAO().updatePassByUserId(id, hashedPass);
+                String subject = "Khôi phục mật khẩu";
+                String content = "Mật khẩu mới của bạn là: " + plainPass;
+                MailDAO.sendEmail(to, subject, content);
+                req.getSession().setAttribute("successMessage", "Mật khẩu mới đã được gửi đến email của " + id);
+                resp.sendRedirect("/qlsv/admin/list-user");
 
-            new LoginDAO().updatePassByUserId(id, hashedPass);
-            String to = users.getEmail();
-            String subject = "Khôi phục mật khẩu";
-            String content = "Mật khẩu mới của bạn là: " + plainPass;
+            } else {
+                Student student = userDAO.findStudentById(id);
+                if (student != null) {
+                    plainPass = new SimpleDateFormat("yyyy-MM-dd").format(student.getDateOfBirth());
+                    to = student.getEmail();
 
-            MailDAO.sendEmail(to, subject, content);
+                    String hashedPass = BCrypt.withDefaults().hashToString(12, plainPass.toCharArray());
+                    new LoginDAO().updatePassByStudentId(id, hashedPass);
 
-            req.getSession().setAttribute("successMessage", "Mật khẩu mới đã được gửi đến email của " + id);
+                    String subject = "Khôi phục mật khẩu";
+                    String content = "Mật khẩu mới của bạn là: " + plainPass;
+                    MailDAO.sendEmail(to, subject, content);
+
+                    req.getSession().setAttribute("successMessage", "Mật khẩu mới đã được gửi đến email của " + id);
+                    resp.sendRedirect("/qlsv/admin/sinhvien");
+
+                } else {
+                    req.getSession().setAttribute("errorMessage", "Không tìm thấy người dùng.");
+                    resp.sendRedirect("/qlsv/admin/list-user");
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
-            req.getSession().setAttribute("successMessage", "Không thể khôi phục mật khẩu cho tài khoản " + id);
-        }
-        if ("sinhvien".equals(users.getType())) {
-            resp.sendRedirect("/qlsv/admin/sinhvien");
-        } else {
+            req.getSession().setAttribute("errorMessage", "Không thể khôi phục mật khẩu cho tài khoản " + id);
             resp.sendRedirect("/qlsv/admin/list-user");
         }
     }

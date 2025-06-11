@@ -39,8 +39,7 @@
 								<th>Mã sinh viên</th>
 								<th>Tên sinh viên</th>
 								<th>Môn học</th>
-								<th>Điểm chuyên cần</th>
-								<th>Điểm kiểm tra</th>
+								<th>Điểm quá trình</th>
 								<th>Điểm thi cuối kỳ</th>
 								<th>Điểm trung bình môn</th>
 								<th>Thao tác</th>
@@ -52,26 +51,18 @@
 							<c:forEach var="ss" items="${ss}" varStatus="loop">
 								<tr>
 								    <c:if test="${loop.index == 0}">
-                                        <td rowspan="${fn:length(ss.score.users.id)}">${ss.score.users.id}</td>
+                                        <td rowspan="${fn:length(ss.student.id)}">${ss.student.id}</td>
                                     </c:if>
                                     <c:if test="${loop.index == 0}">
-                                        <td rowspan="${fn:length(ss.score.users.name)}">${ss.score.users.name}</td>
+                                        <td rowspan="${fn:length(ss.student.name)}">${ss.student.name}</td>
                                     </c:if>
 									<td>${ss.subject.name}</td>
 									<td><c:choose>
-											<c:when test="${ss.scoreLaborious == 0.0}">
+											<c:when test="${ss.scoreProcess == 0.0}">
                                                 Chưa nhập điểm
                                             </c:when>
 											<c:otherwise>
-                                                ${ss.scoreLaborious}
-                                            </c:otherwise>
-										</c:choose></td>
-									<td><c:choose>
-											<c:when test="${ss.scoreCheck == 0.0}">
-                                                Chưa nhập điểm
-                                            </c:when>
-											<c:otherwise>
-                                                ${ss.scoreCheck}
+                                                ${ss.scoreProcess}
                                             </c:otherwise>
 										</c:choose></td>
 									<td><c:choose>
@@ -106,10 +97,10 @@
 
 											<c:otherwise>
 												<c:choose>
-													<c:when test="${ss.scoreLaborious == 0.0}">
+													<c:when test="${ss.scoreProcess == 0.0}">
 														<a href="#" class="text-success" data-bs-toggle="modal"
 															data-bs-target="#addScoreModal"
-															data-student-id="${ss.score.users.id}"
+															data-student-id="${ss.student.id}"
 															data-subject-id="${ss.subject.id}"
 															title="Hạn cuối thêm điểm: <fmt:formatDate value="${ss.subject.startDate}" pattern="dd/MM/yyyy" />">
 															<i class="fa-solid fa-plus"></i>
@@ -117,7 +108,7 @@
 													</c:when>
 													<c:otherwise>
 														<a class="text-info"
-															href="${pageContext.request.contextPath}/teacher/update-score?scoreSubjectId=${ss.id}&studentId=${ss.score.users.id}"
+															href="${pageContext.request.contextPath}/teacher/update-score?scoreSubjectId=${ss.id}&studentId=${ss.student.id}"
 															title="Hạn cuối sửa điểm: <fmt:formatDate value="${ss.subject.startDate}" pattern="dd/MM/yyyy" />">
 															<i class="fa-regular fa-pen-to-square"></i>
 														</a>
@@ -166,14 +157,9 @@
 							<div class="g-3">
 								<!-- Thêm class 'row' để các col-md-4 nằm cùng hàng -->
 								<div class="form-group">
-									<label class="form-label">Điểm chuyên cần</label> <input
+									<label class="form-label">Điểm quá trình</label> <input
 										type="number" min="0" max="10" class="form-control"
 										name="chuyencan" required>
-								</div>
-								<div class="form-group">
-									<label class="form-label">Điểm kiểm tra</label> <input
-										type="number" min="0" max="10" class="form-control"
-										name="kiemtra" required>
 								</div>
 								<div class="form-group">
 									<label class="form-label">Điểm thi</label> <input type="number"

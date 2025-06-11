@@ -1,7 +1,5 @@
 package com.example.controller.admin;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.example.dao.LoginDAO;
 import com.example.dao.UserDAO;
 import com.example.model.Student;
 import com.example.model.Teacher;
@@ -13,15 +11,16 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Objects;
-import java.util.UUID;
 
-@WebServlet("/admin/add-sinhvien")
-public class AddStudentController extends HttpServlet {
+@WebServlet("/admin/update-sinhvien")
+public class UpdateStudentController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id");
+        Student users = new UserDAO().findStudentById(id);
         req.setAttribute("activePage", "sinhvien");
-        req.getRequestDispatcher("/view/admin/add-sinhvien.jsp").forward(req,resp);
+        req.setAttribute("users", users);
+        req.getRequestDispatcher("/view/admin/update-sinhvien.jsp").forward(req, resp);
     }
 
     @Override
@@ -34,39 +33,27 @@ public class AddStudentController extends HttpServlet {
         String dateOfBirth = req.getParameter("ngaysinh");
         String startTime = req.getParameter("starttime");
         String endTime = req.getParameter("endtime");
-
-
-        String hashedPassword = BCrypt.withDefaults().hashToString(12,dateOfBirth.toCharArray());
         Student user = new Student();
         user.setId(id);
         user.setName(name);
         user.setPhone(phone);
         user.setEmail(email);
         user.setAddress(address);
-        user.setDateOfBirth(Date.valueOf(dateOfBirth));
         user.setStartYear(Date.valueOf(startTime));
         user.setEndYear(Date.valueOf(endTime));
-        user.setCreateAt(new java.sql.Date(System.currentTimeMillis()));
+        user.setDateOfBirth(Date.valueOf(dateOfBirth));
         user.setLastmodified(new java.sql.Date(System.currentTimeMillis()));
-        user.setDeleted(false);
-        user.setStatus(false);
-        user.setPassword(hashedPassword);
-
         UserDAO userDAO = new UserDAO();
 
-        // Sinh mã người dùng
-        var userCode = userDAO.genUserCode("USER");
-        if(Objects.nonNull(userCode)) user.setId(userCode);
-        try {
-            userDAO.addStudent(user);
 
-            req.getSession().setAttribute("successMessage", "Thêm mới người dùng thành công!");
+        try {
+            userDAO.updateStudent(user);
+            req.getSession().setAttribute("successMessage", "Sửa người dùng thành công!");
             resp.sendRedirect("/qlsv/admin/sinhvien");
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("reopenModal", true);
-            req.setAttribute("error", "Có lỗi xảy ra khi thêm người dùng.");
-            req.getRequestDispatcher("/view/admin/add-sinhvien.jsp").forward(req, resp);
+            req.setAttribute("errorMessage", "Có lỗi xảy ra khi thêm người dùng.");
+            req.getRequestDispatcher("/view/admin/update-user.jsp").forward(req, resp);
         }
     }
 }

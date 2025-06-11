@@ -3,7 +3,7 @@ package com.example.controller.admin;
 import com.example.dao.ClassDAO;
 import com.example.dao.UserDAO;
 import com.example.model.Class;
-import com.example.model.Users;
+import com.example.model.Teacher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,7 +20,7 @@ import java.util.UUID;
 public class AddClassController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Users> teachers = new ArrayList<>();
+        List<Teacher> teachers = new ArrayList<>();
         teachers = new UserDAO().getAll();
         req.setAttribute("user",teachers);
         req.setAttribute("activePage", "lophoc");
@@ -39,7 +39,7 @@ public class AddClassController extends HttpServlet {
         aClass.setLastModified(new Date(System.currentTimeMillis()));
         aClass.setStatus(false);
         if (teacherId != null && !teacherId.trim().isEmpty()){
-            Users teacher = new Users();
+            Teacher teacher = new Teacher();
             teacher.setId(teacherId);
             aClass.setTeacher(teacher);
         }else {
@@ -55,5 +55,5 @@ public class AddClassController extends HttpServlet {
             req.setAttribute("error","Thêm mới không thành công hãy thêm lại");
             req.getRequestDispatcher("/view/admin/add-lophoc.jsp").forward(req,resp);
         }
-    }
+  }
 }

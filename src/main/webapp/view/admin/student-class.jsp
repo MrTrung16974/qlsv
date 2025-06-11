@@ -58,17 +58,17 @@
 							<c:forEach items="${requestScope.cl}" var="cl" varStatus="status">
 								<tr>
 									<td>${status.index + 1}</td>
-									<td>${cl.users.id}</td>
-									<td>${cl.users.name}</td>
-									<td>${cl.users.address}</td>
-									<td>${cl.users.dateOfBirth}</td>
+									<td>${cl.student.id}</td>
+									<td>${cl.student.name}</td>
+									<td>${cl.student.address}</td>
+									<td>${cl.student.dateOfBirth}</td>
 									<td>
 										<div class="action-icons">
-											<a href="${pageContext.request.contextPath}/admin/diem-student?id=${cl.aClass.id}&studentId=${cl.users.id}" class="text-success"
+											<a href="${pageContext.request.contextPath}/admin/diem-student?id=${cl.aClass.id}&studentId=${cl.student.id}" class="text-success"
 												><i
 												class="fa-solid fa-table"></i></a> <a href="#"
 												class="text-danger" href="#"
-												onclick="deleteStudentFromClass('${cl.users.id}', '${cl.aClass.id}')">
+												onclick="deleteStudentFromClass('${cl.student.id}', '${cl.aClass.id}')">
 												<i class="fa-solid fa-trash"></i>
 											</a>
 										</div>

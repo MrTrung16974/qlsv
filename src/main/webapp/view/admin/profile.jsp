@@ -30,12 +30,9 @@
 										<div class="col-lg-3 col-md-4 label">Chức vụ</div>
 										<div class="col-lg-9 col-md-8">
 											<c:choose>
-												<c:when test="${st.type == 'admin'}">
+												<c:when test="${st.type == '0'}">
 													Quản trị viên
 												</c:when>
-												<c:when test="${st.type == 'sinhvien'}">
-                                                     Sinh viên
-                                                </c:when>
 												<c:otherwise>
                                                      ${st.type}
 												</c:otherwise>
@@ -54,11 +51,6 @@
 									<div class="row">
 										<div class="col-lg-3 col-md-4 label">Số điện thoại</div>
 										<div class="col-lg-9 col-md-8">${st.phone}</div>
-									</div>
-
-									<div class="row">
-										<div class="col-lg-3 col-md-4 label">Địa chỉ</div>
-										<div class="col-lg-9 col-md-8">${st.address}</div>
 									</div>
 									<div class="row">
 										<a href="#" class="col-lg-3 col-md-4 label"

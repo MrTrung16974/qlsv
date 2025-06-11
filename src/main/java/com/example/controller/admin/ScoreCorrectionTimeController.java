@@ -17,7 +17,6 @@ public class ScoreCorrectionTimeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String subjectId = req.getParameter("id");
-        //ScoreSubject scoreSubject = new ScoreSubjectDAO().getScoreSubjectBySubjectId(subjectId);
         Subject subject = new SubjectDAO().findById(subjectId);
         req.setAttribute("ss",subject);
         req.setAttribute("activePage", "monhoc");

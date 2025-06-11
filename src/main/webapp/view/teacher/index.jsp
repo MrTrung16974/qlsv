@@ -31,32 +31,6 @@
 									</div>
 
 									<div class="row">
-										<div class="col-lg-3 col-md-4 label">Chức vụ</div>
-										<div class="col-lg-9 col-md-8">
-											<c:choose>
-												<c:when test="${t.typePosition == 'giang_vien'}">
-                                                        Giảng viên
-                                                    </c:when>
-												<c:when test="${t.typePosition == 'thinh_giang'}">
-                                                        Thỉnh giảng
-                                                    </c:when>
-												<c:otherwise>
-                                                        ${t.typePosition} <!-- fallback nếu không khớp -->
-												</c:otherwise>
-											</c:choose>
-										</div>
-									</div>
-
-									<div class="row">
-										<div class="col-lg-3 col-md-4 label">Thời hạn hợp đồng</div>
-										<div class="col-lg-9 col-md-8">
-											<fmt:formatDate value="${t.startTime}" pattern="yyyy" />
-											-
-											<fmt:formatDate value="${t.endTime}" pattern="yyyy" />
-										</div>
-									</div>
-
-									<div class="row">
 										<div class="col-lg-3 col-md-4 label">Email</div>
 										<div class="col-lg-9 col-md-8">${t.email}</div>
 									</div>
@@ -64,11 +38,6 @@
 									<div class="row">
 										<div class="col-lg-3 col-md-4 label">Số điện thoại</div>
 										<div class="col-lg-9 col-md-8">${t.phone}</div>
-									</div>
-
-									<div class="row">
-										<div class="col-lg-3 col-md-4 label">Địa chỉ</div>
-										<div class="col-lg-9 col-md-8">${t.address}</div>
 									</div>
 									<div class="row">
 										<a href="#" class="col-lg-3 col-md-4 label" data-bs-toggle="modal"
