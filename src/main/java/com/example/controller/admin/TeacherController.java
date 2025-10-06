@@ -9,7 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.poi.util.StringUtil;
 
 
 import java.io.IOException;
@@ -66,11 +65,9 @@ public class TeacherController extends HttpServlet {
         String hashedPassword = BCrypt.withDefaults().hashToString(12, dateOfBirth.toCharArray());
         Teacher user = new Teacher();
         user.setId(id);
-
-        if(Objects.isNull(user.getId()) || StringUtil.isBlank(user.getId())) {
-            var userCode = userDAO.genUserCode("TEACHER");
-            if(Objects.nonNull(userCode)) user.setId(userCode);
-        }
+        // Sinh mã người dùng
+        var userCode = userDAO.genUserCode("TEACHER");
+        if(Objects.nonNull(userCode)) user.setId(userCode);
 
         user.setName(name);
         user.setPhone(phone);

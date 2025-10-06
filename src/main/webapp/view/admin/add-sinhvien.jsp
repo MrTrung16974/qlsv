@@ -15,6 +15,10 @@
 						<h5 class="card-title">Thêm mới sinh viên</h5>
 						<form class="row g-3" action="${pageContext.request.contextPath}/admin/add-sinhvien" method="post">
 							<div class="col-md-6">
+								<label class="form-label">Mã</label>
+								<input type="text" class="form-control" name="id" required>
+							</div>
+							<div class="col-md-6">
 								<label class="form-label">Tên</label>
 								<input type="text" class="form-control" name="ten" required>
 							</div>

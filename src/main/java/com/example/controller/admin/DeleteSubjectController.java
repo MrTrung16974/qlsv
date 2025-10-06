@@ -17,6 +17,6 @@ public class DeleteSubjectController extends HttpServlet {
         SubjectDAO subjectDAO = new SubjectDAO();
         subjectDAO.delete(id);
         req.getSession().setAttribute("successMessage", "Xóa môn học thành công!");
-        resp.sendRedirect("/qlsv/admin/mon-hoc");
+        resp.sendRedirect("/QLSV/admin/mon-hoc");
     }
 }

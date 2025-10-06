@@ -17,6 +17,6 @@ public class LockClassController extends HttpServlet {
         ClassDAO classDAO = new ClassDAO();
         classDAO.lock(id);
         req.getSession().setAttribute("successMessage", "Khóa lớp thành công!");
-        resp.sendRedirect("/qlsv/admin/lop-hoc");
+        resp.sendRedirect("/QLSV/admin/lop-hoc");
     }
 }

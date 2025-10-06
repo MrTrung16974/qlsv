@@ -17,6 +17,6 @@ public class UnLockSubjectController extends HttpServlet {
         SubjectDAO subjectDAO = new SubjectDAO();
         subjectDAO.unLockSubject(id);
         req.getSession().setAttribute("successMessage", "Mở khóa môn học thành công!");
-        resp.sendRedirect("/qlsv/admin/mon-hoc");
+        resp.sendRedirect("/QLSV/admin/mon-hoc");
     }
 }

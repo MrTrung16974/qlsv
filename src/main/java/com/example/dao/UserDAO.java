@@ -240,7 +240,7 @@ public class UserDAO extends DBConnect{
         }
     }
     public void addStudent(Student user) {
-        String sql = "INSERT INTO STUDENT (ID, NAME, PHONE, EMAIL,ADDRESS , DATE_OF_BIRTH,START_YEAR, END_YEAR ,PASSWORD, CREATE_AT, LASTMODIFIED, DELETED, STATUS) "
+        String sql = "INSERT INTO STUDENT (ID, NAME, PHONE, MAIL,ADDRESS , DATE_OF_BIRTH,START_YEAR, END_YEAR ,PASSWORD, CREATE_AT, LASTMODIFIED, DELETED, STATUS) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
 
         try {
@@ -285,7 +285,7 @@ public class UserDAO extends DBConnect{
 
     public void updateStudent(Student student) {
         String sql = "UPDATE STUDENT SET NAME = ?, START_YEAR = ?, END_YEAR = ?, DATE_OF_BIRTH = ?, " +
-                "ADDRESS = ?, PHONE = ?, EMAIL = ?, LASTMODIFIED = ? " +
+                "ADDRESS = ?, PHONE = ?, EMAIL = ? LASTMODIFIED = ? " +
                 "WHERE ID = ? ";
 
         try {
@@ -297,8 +297,7 @@ public class UserDAO extends DBConnect{
             pst.setString(5, student.getAddress());
             pst.setString(6, student.getPhone());
             pst.setString(7, student.getEmail());
-            pst.setDate(8, new java.sql.Date(student.getLastmodified().getTime()));
-            pst.setString(9, student.getId());
+            pst.setString(8, student.getId());
 
             pst.executeUpdate();
         } catch (SQLException e) {

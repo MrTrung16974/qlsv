@@ -48,12 +48,12 @@ public class AddScoreStudentController extends HttpServlet {
             ScoreSubjectDAO subjectDAO = new ScoreSubjectDAO();
             subjectDAO.addScoreSubject(ss);
             req.getSession().setAttribute("successMessage", "Thêm mới điểm thành công!");
-            resp.sendRedirect("/qlsv/teacher/diem-sinhvien?studentId="+studentId);
+            resp.sendRedirect("/QLSV/teacher/diem-sinhvien?studentId="+studentId);
         }catch (Exception e){
             e.printStackTrace();
             String errorMessage = "Đã xảy ra lỗi khi thêm điểm mời thêm lại!";
             String encodedError = URLEncoder.encode(errorMessage, StandardCharsets.UTF_8.toString());
-            resp.sendRedirect(req.getContextPath() + "/qlsv/teacher/diem-sinhvien?reopenModal=true&error=" + encodedError);
+            resp.sendRedirect(req.getContextPath() + "/QLSV/teacher/diem-sinhvien?reopenModal=true&error=" + encodedError);
         }
     }
 }

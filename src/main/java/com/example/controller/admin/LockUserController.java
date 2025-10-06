@@ -23,20 +23,20 @@ public class LockUserController extends HttpServlet {
             if (users.getType() == 1) {
                 userDAO.lockUser(id);
                 req.getSession().setAttribute("successMessage", "Khóa người dùng thành công!");
-                resp.sendRedirect("/qlsv/admin/list-user");
+                resp.sendRedirect("/QLSV/admin/list-user");
             } else {
                 req.getSession().setAttribute("errorMessage", "Người dùng không hợp lệ!");
-                resp.sendRedirect("/qlsv/admin/list-user");
+                resp.sendRedirect("/QLSV/admin/list-user");
             }
         } else {
             Student student = userDAO.findStudentById(id);
             if (student != null) {
                 userDAO.lockStudent(student.getId());
                 req.getSession().setAttribute("successMessage", "Khóa người dùng thành công!");
-                resp.sendRedirect("/qlsv/admin/sinhvien");
+                resp.sendRedirect("/QLSV/admin/sinhvien");
             } else {
                 req.getSession().setAttribute("errorMessage", "Không tìm thấy người dùng hoặc sinh viên!");
-                resp.sendRedirect("/qlsv/admin/list-user");
+                resp.sendRedirect("/QLSV/admin/list-user");
             }
         }
 

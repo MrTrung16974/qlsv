@@ -23,20 +23,20 @@ public class UnlockUserController extends HttpServlet {
             if (users.getType() == 1) {
                 userDAO.unLockUser(id);
                 req.getSession().setAttribute("successMessage", "Mở khóa người dùng thành công!");
-                resp.sendRedirect("/qlsv/admin/list-user");
+                resp.sendRedirect("/QLSV/admin/list-user");
             } else {
                 req.getSession().setAttribute("errorMessage", "Loại người dùng không hợp lệ!");
-                resp.sendRedirect("/qlsv/admin/list-user");
+                resp.sendRedirect("/QLSV/admin/list-user");
             }
         } else {
             Student student = userDAO.findStudentById(id);
             if (student != null) {
                 userDAO.unLockStudent(student.getId());
                 req.getSession().setAttribute("successMessage", "Mở khóa sinh viên thành công!");
-                resp.sendRedirect("/qlsv/admin/sinhvien");
+                resp.sendRedirect("/QLSV/admin/sinhvien");
             } else {
                 req.getSession().setAttribute("errorMessage", "Không tìm thấy người dùng hoặc sinh viên!");
-                resp.sendRedirect("/qlsv/admin/list-user");
+                resp.sendRedirect("/QLSV/admin/list-user");
             }
 
         }

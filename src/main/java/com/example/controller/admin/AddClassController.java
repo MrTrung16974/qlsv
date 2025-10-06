@@ -49,7 +49,7 @@ public class AddClassController extends HttpServlet {
             ClassDAO classDAO = new ClassDAO();
             classDAO.insert(aClass);
             req.getSession().setAttribute("successMessage", "Thêm mới lớp học thành công!");
-            resp.sendRedirect("/qlsv/admin/lop-hoc");
+            resp.sendRedirect("/QLSV/admin/lop-hoc");
         }catch (Exception e){
             e.printStackTrace();
             req.setAttribute("error","Thêm mới không thành công hãy thêm lại");

@@ -186,7 +186,7 @@
 		function confirmExit() {
 			const isConfirmed = confirm("Bạn có chắc chắn muốn thoát khỏi trang này?");
 			if (isConfirmed) {
-				window.location.href = "http://localhost:8080/qlsv/teacher/thongtin-lop";
+				window.location.href = "http://localhost:8080/QLSV/teacher/thongtin-lop";
 			}
 			return false; // Ngăn chặn <a> tự reload trang nếu cancel
 		}

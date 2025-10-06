@@ -18,6 +18,6 @@ public class LockSubjectController extends HttpServlet {
         SubjectDAO subjectDAO = new SubjectDAO();
         subjectDAO.lockSubject(id);
         req.getSession().setAttribute("successMessage", "Khóa môn học thành công!");
-        resp.sendRedirect("/qlsv/admin/mon-hoc");
+        resp.sendRedirect("/QLSV/admin/mon-hoc");
     }
 }

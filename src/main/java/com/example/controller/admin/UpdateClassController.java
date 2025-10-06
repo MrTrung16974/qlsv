@@ -47,7 +47,7 @@ public class UpdateClassController extends HttpServlet {
             ClassDAO classDAO = new ClassDAO();
             classDAO.update(aClass);
             req.getSession().setAttribute("successMessage", "Thay đổi thông tin thành công!");
-            resp.sendRedirect("/qlsv/admin/lop-hoc");
+            resp.sendRedirect("/QLSV/admin/lop-hoc");
         }catch (Exception e){
             e.printStackTrace();
             req.setAttribute("error","Thêm mới không thành công hãy thêm lại");

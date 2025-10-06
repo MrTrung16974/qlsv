@@ -32,7 +32,7 @@ public class AddClassStudentController extends HttpServlet {
             classUserDAO.addStudentsToClass(classId, students);
             req.setAttribute("activePage", "lophoc");
             req.getSession().setAttribute("successMessage", "Thêm mới sinh viên thành công!");
-            resp.sendRedirect("/qlsv/admin/lop-student?id="+classId);
+            resp.sendRedirect("/QLSV/admin/lop-student?id="+classId);
         }catch (Exception e){
             e.printStackTrace();
             String errorMessage = "Thêm mới không thành công!";

@@ -17,6 +17,6 @@ public class DeleteScoreTimeController extends HttpServlet {
         String id = req.getParameter("id");
         new SubjectDAO().deleteTimeBySubjectId(id);
         req.getSession().setAttribute("successMessage", "Xóa thời gian thành công!");
-        resp.sendRedirect("/qlsv/admin/score-time?id="+id);
+        resp.sendRedirect("/QLSV/admin/score-time?id="+id);
     }
 }

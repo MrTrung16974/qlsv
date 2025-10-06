@@ -10,7 +10,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.poi.util.StringUtil;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -56,16 +55,13 @@ public class AddStudentController extends HttpServlet {
         UserDAO userDAO = new UserDAO();
 
         // Sinh mã người dùng
-
-        if(Objects.isNull(user.getId()) || StringUtil.isBlank(user.getId())) {
-            var userCode = userDAO.genUserCode("USER");
-            if(Objects.nonNull(userCode)) user.setId(userCode);
-        }
+        var userCode = userDAO.genUserCode("USER");
+        if(Objects.nonNull(userCode)) user.setId(userCode);
         try {
             userDAO.addStudent(user);
 
             req.getSession().setAttribute("successMessage", "Thêm mới người dùng thành công!");
-            resp.sendRedirect("/qlsv/admin/sinhvien");
+            resp.sendRedirect("/QLSV/admin/sinhvien");
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("reopenModal", true);

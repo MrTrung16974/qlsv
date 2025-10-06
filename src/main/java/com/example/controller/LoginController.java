@@ -62,9 +62,9 @@ public class LoginController extends HttpServlet {
                 session.setAttribute("type", userLogin.getType());
 
                 if (userLogin.getType() == 0) {
-                    resp.sendRedirect("/qlsv/admin");
+                    resp.sendRedirect("/QLSV/admin");
                 } else if (userLogin.getType() == 1) {
-                    resp.sendRedirect("/qlsv/teacher");
+                    resp.sendRedirect("/QLSV/teacher");
                 }
                 return;
             }
@@ -87,7 +87,7 @@ public class LoginController extends HttpServlet {
                 session.removeAttribute("failedAttempts");
                 session.setAttribute("id", studentLogin.getId());
                 session.setAttribute("name", studentLogin.getName());
-                resp.sendRedirect("/qlsv/student");
+                resp.sendRedirect("/QLSV/student");
                 return;
             }
         }

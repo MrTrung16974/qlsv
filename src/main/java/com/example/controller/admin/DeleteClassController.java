@@ -17,6 +17,6 @@ public class DeleteClassController extends HttpServlet {
         ClassDAO classDAO = new ClassDAO();
         classDAO.delete(id);
         req.getSession().setAttribute("successMessage", "Xóa lớp thành công!");
-        resp.sendRedirect("/qlsv/admin/lop-hoc");
+        resp.sendRedirect("/QLSV/admin/lop-hoc");
     }
 }

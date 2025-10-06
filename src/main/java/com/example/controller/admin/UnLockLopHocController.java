@@ -17,6 +17,6 @@ public class UnLockLopHocController extends HttpServlet {
         ClassDAO classDAO = new ClassDAO();
         classDAO.unLock(id);
         req.getSession().setAttribute("successMessage", "Mở khóa lớp học thành công!");
-        resp.sendRedirect("/qlsv/admin/lop-hoc");
+        resp.sendRedirect("/QLSV/admin/lop-hoc");
     }
 }

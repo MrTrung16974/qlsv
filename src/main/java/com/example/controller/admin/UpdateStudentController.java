@@ -20,7 +20,7 @@ public class UpdateStudentController extends HttpServlet {
         Student users = new UserDAO().findStudentById(id);
         req.setAttribute("activePage", "sinhvien");
         req.setAttribute("users", users);
-        req.getRequestDispatcher("/view/admin/update_sinhvien.jsp").forward(req, resp);
+        req.getRequestDispatcher("/view/admin/update-sinhvien.jsp").forward(req, resp);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class UpdateStudentController extends HttpServlet {
         try {
             userDAO.updateStudent(user);
             req.getSession().setAttribute("successMessage", "Sửa người dùng thành công!");
-            resp.sendRedirect("/qlsv/admin/sinhvien");
+            resp.sendRedirect("/QLSV/admin/sinhvien");
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("errorMessage", "Có lỗi xảy ra khi thêm người dùng.");

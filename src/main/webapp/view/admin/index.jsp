@@ -189,6 +189,10 @@
 												<p style="color: red;">${param.error}</p>
 											</c:if>
 											<div class="col-md-6">
+												<label class="form-label">Mã</label> <input type="text"
+													class="form-control" name="id" required>
+											</div>
+											<div class="col-md-6">
 												<label class="form-label">Tên</label> <input type="text"
 													class="form-control" name="ten" required>
 											</div>
@@ -238,10 +242,10 @@
 
 				<!-- Body -->
 				<div class="modal-body">
-				    <form action="/qlsv/download-excel" method="get">
+				    <form action="/QLSV/download-excel" method="get">
                 		<button type="submit">Tải file Excel mẫu</button>
                 	</form>
-					<form action="/qlsv/admin/uploads" method="post"
+					<form action="/QLSV/admin/uploads" method="post"
 						enctype="multipart/form-data">
 						<div class="mb-3">
 							<label for="formFile" class="form-label">Chọn file Excel
@@ -262,26 +266,26 @@
 	<script>
 		function confirmDelete(userId) {
 			if (confirm("Bạn có chắc chắn muốn xóa " + userId + " này?")) {
-				window.location.href = "/qlsv/admin/delete-user?id=" + userId;
+				window.location.href = "/QLSV/admin/delete-user?id=" + userId;
 			}
 		}
 
 		function confirmLock(userId) {
 			if (confirm("Bạn có chắc chắn muốn khóa tài khoản " + userId
 					+ " này?")) {
-				window.location.href = "/qlsv/admin/lock-user?id=" + userId;
+				window.location.href = "/QLSV/admin/lock-user?id=" + userId;
 			}
 		}
 		function confirmResetPass(userId) {
 			if (confirm("Bạn có chắc chắn muốn reset mật khẩu " + userId
 					+ " này?")) {
-				window.location.href = "/qlsv/admin/reset-pass?id=" + userId;
+				window.location.href = "/QLSV/admin/reset-pass?id=" + userId;
 			}
 		}
 		function confirmUnlock(userId) {
 			if (confirm("Bạn có chắc chắn muốn mở khóa tài khoản " + userId
 					+ " này?")) {
-				window.location.href = "/qlsv/admin/unlock-user?id=" + userId;
+				window.location.href = "/QLSV/admin/unlock-user?id=" + userId;
 			}
 		}
 	</script>

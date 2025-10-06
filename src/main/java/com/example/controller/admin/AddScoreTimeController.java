@@ -30,7 +30,7 @@ public class AddScoreTimeController extends HttpServlet {
         try {
             new SubjectDAO().updateTimeBySubjectId(Date.valueOf(startDate),Date.valueOf(endDate),subjectId);
             req.getSession().setAttribute("successMessage", "Thêm mới thành công!");
-            resp.sendRedirect("/qlsv/admin/score-time?id="+subjectId);
+            resp.sendRedirect("/QLSV/admin/score-time?id="+subjectId);
         }catch (Exception e){
             e.printStackTrace();
             req.setAttribute("error","Thêm không thành công!");

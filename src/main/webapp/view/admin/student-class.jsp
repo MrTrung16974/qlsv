@@ -16,7 +16,7 @@
 				</div>
 
 				<div class="search-container">
-                    <form action="/qlsv/admin/lop-student" method="GET">
+                    <form action="/QLSV/admin/lop-student" method="GET">
                         <input type="text" class="search-input" name="searchTerm" placeholder="Tìm kiếm theo mã hoặc tên sinh viên..." />
                         <input type="hidden" name="id" value="${clazz.id}" />  <!-- Hidden field to pass the class ID -->
                         <button class="btn-search" type="submit">Tìm</button>
@@ -147,7 +147,7 @@
 		function deleteStudentFromClass(studentId, classId) {
 			if (confirm("Bạn có chắc chắn muốn xóa sinh viên mã " + studentId
 					+ " khỏi lớp ?")) {
-				window.location = "/qlsv/admin/delete-sinhvien-lop?studentId="
+				window.location = "/QLSV/admin/delete-sinhvien-lop?studentId="
 						+ studentId + "&classId=" + classId;
 			}
 		}

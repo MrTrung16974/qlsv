@@ -33,7 +33,7 @@ public class UpdateScoreTimeController extends HttpServlet {
         try {
             new SubjectDAO().updateTimeBySubjectId(Date.valueOf(startDate),Date.valueOf(endDate),subjectId);
             req.getSession().setAttribute("successMessage", "Thay đổi thành công!");
-            resp.sendRedirect("/qlsv/admin/score-time?id="+subjectId);
+            resp.sendRedirect("/QLSV/admin/score-time?id="+subjectId);
         }catch (Exception e){
             e.printStackTrace();
             req.setAttribute("error","Thay đổi không thành công!");

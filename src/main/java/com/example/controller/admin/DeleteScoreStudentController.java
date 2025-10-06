@@ -18,6 +18,6 @@ public class DeleteScoreStudentController extends HttpServlet {
         String classId = req.getParameter("classId");
         new ScoreSubjectDAO().deleteScoreSubjectById(ssId);
         req.getSession().setAttribute("successMessage", "xóa điểm thành công!");
-        resp.sendRedirect("/qlsv/admin/diem-student?id="+classId+"&studentId="+studentId);
+        resp.sendRedirect("/QLSV/admin/diem-student?id="+classId+"&studentId="+studentId);
     }
 }

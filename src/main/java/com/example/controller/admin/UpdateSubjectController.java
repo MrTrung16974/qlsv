@@ -66,7 +66,7 @@ public class UpdateSubjectController extends HttpServlet {
         try {
             subjectDAO.update(subject);
             req.getSession().setAttribute("successMessage", "Thay đổi thông tin thành công!");
-            resp.sendRedirect("/qlsv/admin/mon-hoc");
+            resp.sendRedirect("/QLSV/admin/mon-hoc");
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("error", "Đã xảy ra lỗi trong quá trình thêm mới môn học");

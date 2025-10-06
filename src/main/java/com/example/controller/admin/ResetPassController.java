@@ -35,7 +35,7 @@ public class ResetPassController extends HttpServlet {
                 String content = "Mật khẩu mới của bạn là: " + plainPass;
                 MailDAO.sendEmail(to, subject, content);
                 req.getSession().setAttribute("successMessage", "Mật khẩu mới đã được gửi đến email của " + id);
-                resp.sendRedirect("/qlsv/admin/list-user");
+                resp.sendRedirect("/QLSV/admin/list-user");
 
             } else {
                 Student student = userDAO.findStudentById(id);
@@ -51,18 +51,18 @@ public class ResetPassController extends HttpServlet {
                     MailDAO.sendEmail(to, subject, content);
 
                     req.getSession().setAttribute("successMessage", "Mật khẩu mới đã được gửi đến email của " + id);
-                    resp.sendRedirect("/qlsv/admin/sinhvien");
+                    resp.sendRedirect("/QLSV/admin/sinhvien");
 
                 } else {
                     req.getSession().setAttribute("errorMessage", "Không tìm thấy người dùng.");
-                    resp.sendRedirect("/qlsv/admin/list-user");
+                    resp.sendRedirect("/QLSV/admin/list-user");
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             req.getSession().setAttribute("errorMessage", "Không thể khôi phục mật khẩu cho tài khoản " + id);
-            resp.sendRedirect("/qlsv/admin/list-user");
+            resp.sendRedirect("/QLSV/admin/list-user");
         }
     }
 }

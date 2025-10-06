@@ -9,7 +9,7 @@ public class DBConnect {
 
     public DBConnect() {
         try {
-            String url = "jdbc:oracle:thin:@//0.tcp.ap.ngrok.io:16932/ORCL";
+            String url = "jdbc:oracle:thin:@//localhost:1521/ORCL";
             String user = "QLSV";
             String pass = "abc123";
             Class.forName("oracle.jdbc.OracleDriver");

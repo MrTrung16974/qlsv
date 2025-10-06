@@ -56,7 +56,7 @@ public class UpdateScoreStudentController extends HttpServlet {
             ScoreSubjectDAO subjectDAO = new ScoreSubjectDAO();
             subjectDAO.updateScoreSubject(ss);
             req.getSession().setAttribute("successMessage", "Sửa điểm thành công!");
-            resp.sendRedirect("/qlsv/teacher/diem-sinhvien?studentId="+ss.getStudent().getId());
+            resp.sendRedirect("/QLSV/teacher/diem-sinhvien?studentId="+ss.getStudent().getId());
         }catch (Exception e){
             e.printStackTrace();
             req.setAttribute("error","Đã xảy ra lỗi khi sửa điểm mời sửa lại");

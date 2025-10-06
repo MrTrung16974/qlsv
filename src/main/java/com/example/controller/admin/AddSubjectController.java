@@ -71,7 +71,7 @@ public class AddSubjectController extends HttpServlet {
         try {
             subjectDAO.add(subject);
             req.getSession().setAttribute("successMessage", "Thêm mới môn học thành công!");
-            resp.sendRedirect("/qlsv/admin/mon-hoc");
+            resp.sendRedirect("/QLSV/admin/mon-hoc");
         }catch (Exception e){
             e.printStackTrace();
             req.setAttribute("error","Đã xảy ra lỗi trong quá trình thêm mới môn học");
