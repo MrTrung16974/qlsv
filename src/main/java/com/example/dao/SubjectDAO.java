@@ -13,7 +13,7 @@ public class SubjectDAO extends DBConnect{
     UserDAO userDAO = new UserDAO();
     public List<Subject> searchByName(String keyword) {
         List<Subject> subjectList = new ArrayList<>();
-        String sql = "SELECT * FROM SUBJECT WHERE DELETED = 0 AND NAME LIKE ?";
+        String sql = "SELECT * FROM SUBJECT WHERE DELETED = 0 AND NAME LIKE ?  ORDER BY CREATE_AT DESC ";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);

@@ -17,15 +17,15 @@ public class ScoreSubjectDAO extends DBConnect {
                 "    sb.NAME AS subject_name, " +
                 "    sb.START_DATE AS subject_start_date, " +
                 "    sb.END_DATE AS subject_end_date, " +
-                "    COALESCE(ss.SCORE_PROCESS, 0.0) AS score_process, " +
-                "    COALESCE(ss.SCORE_FINAL, 0.0) AS score_final, " +
-                "    COALESCE(ss.SCORE_AVERAGE, 0.0) AS score_average, " +
+                "    NVL(ss.SCORE_PROCESS, 0.0) AS score_process, " +
+                "    NVL(ss.SCORE_FINAL, 0.0) AS score_final, " +
+                "    NVL(ss.SCORE_AVERAGE, 0.0) AS score_average, " +
                 "    ss.ID AS score_subject_id " +
-                "FROM QLSV.CLASS_STUDENT cs " +
-                "JOIN QLSV.STUDENT st ON st.ID = cs.STUDENT_ID " +
-                "JOIN QLSV.CLASS c ON c.ID = cs.CLASS_ID " +
-                "JOIN QLSV.SUBJECT sb ON sb.TEACHER_ID = c.TEACHER_ID " +
-                "LEFT JOIN QLSV.SCORE_SUBJECT ss ON ss.STUDENT_ID = st.ID AND ss.SUBJECT_ID = sb.ID " +
+                "FROM CLASS_STUDENT cs " +
+                "JOIN STUDENT st ON st.ID = cs.STUDENT_ID " +
+                "JOIN CLASS c ON c.ID = cs.CLASS_ID " +
+                "JOIN SUBJECT sb ON sb.TEACHER_ID = c.TEACHER_ID " +
+                "LEFT JOIN SCORE_SUBJECT ss ON ss.STUDENT_ID = st.ID AND ss.SUBJECT_ID = sb.ID " +
                 "WHERE st.ID = ? " +
                 "  AND c.TEACHER_ID = ? " +
                 "  AND st.DELETED = 0 " +

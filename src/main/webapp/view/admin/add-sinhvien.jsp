@@ -16,7 +16,7 @@
 						<form class="row g-3" action="${pageContext.request.contextPath}/admin/add-sinhvien" method="post">
 							<div class="col-md-6">
 								<label class="form-label">Mã</label>
-								<input type="text" class="form-control" name="id" required>
+								<input type="text" class="form-control" name="id" disabled>
 							</div>
 							<div class="col-md-6">
 								<label class="form-label">Tên</label>

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class UserDAO extends DBConnect{
     public List<Teacher> searchUsers(String keyword, int offset, int limit) {
         List<Teacher> usersList = new ArrayList<>();
-        String sql = "SELECT * FROM TEACHER WHERE TYPE='1' AND DELETED = 0 AND NAME LIKE ? OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String sql = "SELECT * FROM TEACHER WHERE TYPE='1' AND DELETED = 0 AND NAME LIKE ? ORDER BY CREATE_AT DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         try {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, "%" + keyword + "%");
@@ -59,8 +60,8 @@ public class UserDAO extends DBConnect{
     public List<Student> searchStudent(String keyword, int offset, int limit) {
         List<Student> usersList = new ArrayList<>();
         String sql = "SELECT * FROM STUDENT " +
-                "WHERE DELETED = 0 AND NAME LIKE ? " +
-                "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+                "WHERE DELETED = 0 AND NAME LIKE ? ORDER BY CREATE_AT DESC " +
+                "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ";
         try {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, "%" + keyword + "%");
@@ -142,7 +143,7 @@ public class UserDAO extends DBConnect{
                         rs.getString("ID"),
                         rs.getString("NAME"),
                         rs.getString("PHONE"),
-                        rs.getString("MAIL"),
+                        rs.getString("EMAIL"),
                         rs.getDate("DATE_OF_BIRTH"),
                         rs.getString("ADDRESS"),
                         null,
@@ -240,7 +241,7 @@ public class UserDAO extends DBConnect{
         }
     }
     public void addStudent(Student user) {
-        String sql = "INSERT INTO STUDENT (ID, NAME, PHONE, MAIL,ADDRESS , DATE_OF_BIRTH,START_YEAR, END_YEAR ,PASSWORD, CREATE_AT, LASTMODIFIED, DELETED, STATUS) "
+        String sql = "INSERT INTO STUDENT (ID, NAME, PHONE, EMAIL,ADDRESS , DATE_OF_BIRTH,START_YEAR, END_YEAR ,PASSWORD, CREATE_AT, LASTMODIFIED, DELETED, STATUS) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
 
         try {
@@ -285,7 +286,7 @@ public class UserDAO extends DBConnect{
 
     public void updateStudent(Student student) {
         String sql = "UPDATE STUDENT SET NAME = ?, START_YEAR = ?, END_YEAR = ?, DATE_OF_BIRTH = ?, " +
-                "ADDRESS = ?, PHONE = ?, EMAIL = ? LASTMODIFIED = ? " +
+                "ADDRESS = ?, PHONE = ?, EMAIL = ?, LASTMODIFIED = ? " +
                 "WHERE ID = ? ";
 
         try {
@@ -297,7 +298,9 @@ public class UserDAO extends DBConnect{
             pst.setString(5, student.getAddress());
             pst.setString(6, student.getPhone());
             pst.setString(7, student.getEmail());
-            pst.setString(8, student.getId());
+            pst.setTimestamp(8,
+                    new java.sql.Timestamp(System.currentTimeMillis()));
+            pst.setString(9, student.getId());
 
             pst.executeUpdate();
         } catch (SQLException e) {
@@ -429,7 +432,7 @@ public class UserDAO extends DBConnect{
 
 
     public String genUserCode(String role) {
-        String sql = "SELECT QLSV.GEN_USER_ID(?) FROM DUAL";
+        String sql = "SELECT \"C##QLSV\".GEN_USER_ID(?) FROM DUAL";
         try {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, role);

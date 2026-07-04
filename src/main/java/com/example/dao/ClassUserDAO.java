@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ClassUserDAO extends DBConnect{
     public List<Class_Student> getStudentsByTeacher(String teacherId, String classId) {
@@ -66,7 +67,7 @@ public class ClassUserDAO extends DBConnect{
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             for (Student student : students) {
                 Class_Student classStudent = new Class_Student();
-                ps.setString(1,classStudent.getId());
+                ps.setString(1, UUID.randomUUID().toString().substring(0,16));
                 ps.setString(2, classId);
                 ps.setString(3, student.getId());
                 ps.setDate(4,classStudent.getCreateAt());

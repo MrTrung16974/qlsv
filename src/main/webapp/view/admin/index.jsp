@@ -174,8 +174,7 @@
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content">
 								<div class="modal-header">
-									<h5 class="modal-title" id="addUserModalLabel">Thêm mới
-										giáo viên</h5>
+									<h5 class="modal-title" id="addUserModalLabel">Thêm mới giáo viên</h5>
 									<button type="button" class="btn-close" data-bs-dismiss="modal"
 										aria-label="Đóng"></button>
 								</div>
@@ -190,7 +189,7 @@
 											</c:if>
 											<div class="col-md-6">
 												<label class="form-label">Mã</label> <input type="text"
-													class="form-control" name="id" required>
+													class="form-control" name="id" disabled>
 											</div>
 											<div class="col-md-6">
 												<label class="form-label">Tên</label> <input type="text"

@@ -9,8 +9,8 @@ public class DBConnect {
 
     public DBConnect() {
         try {
-            String url = "jdbc:oracle:thin:@//localhost:1521/ORCL";
-            String user = "QLSV";
+            String url = "jdbc:oracle:thin:@//localhost:1521/ORCLCDB";
+            String user = "C##QLSV";
             String pass = "abc123";
             Class.forName("oracle.jdbc.OracleDriver");
             conn = DriverManager.getConnection(url, user, pass);
